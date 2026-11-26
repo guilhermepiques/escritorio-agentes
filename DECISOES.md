@@ -67,7 +67,9 @@ As regras das plataformas, com fontes, estão em [`pesquisa/regras-plataformas.m
 - **Público:** código, definição dos agentes, ferramentas, escritório visual, README da arquitetura.
 - **Privado (fora do Git):** produtos, métricas, relatórios, ganhos, aprendizados, chaves e senhas, @ e nomes das contas.
 - O **nome do dono não pode ficar ligado publicamente** às contas da marca: o README não cita os @.
-- **Conta do GitHub: a pessoal do dono** (decidido em 25/11/2026), porque o projeto também é portfólio. O repositório nasce **privado** e só fica público depois de uma revisão.
+- **Conta do GitHub: a pessoal do dono** (decidido em 25/11/2026), porque o projeto também é portfólio. Depois de uma revisão do histórico inteiro, o repositório ficou **público** em 26/11/2026: `escritorio-agentes`, para servir de portfólio.
+  - Antes de cada envio (push), conferir se nada privado entrou no commit.
+  - **O escritório roda só no PC do dono.** Não há cópia do projeto em outro computador.
   - Os commits usam o e-mail **noreply do GitHub**, configurado só neste repositório (nunca o e-mail pessoal).
   - **Feito antes do primeiro commit:**
     - o nome do dono saiu de `rascunhos/produto/CLAUDE-produto.md`;
