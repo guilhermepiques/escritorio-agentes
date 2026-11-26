@@ -67,10 +67,12 @@ const ANIMACOES = ['pop', 'deslizar', 'subir', 'zoom', 'maquina', 'girar'];
 
 const args = process.argv.slice(2);
 const soQuadros = args.includes('--quadros');
+// --fim 0.95: em que ponto de cada cena tirar o quadro de conferência (padrão 0,8 = perto do fim)
+const FRACAO_QUADRO = args.includes('--fim') ? parseFloat(args[args.indexOf('--fim') + 1]) || 0.8 : 0.8;
 const semCache = args.includes('--sem-cache');
 const iSaida = args.indexOf('--saida');
 const saidaPedida = iSaida >= 0 ? args[iSaida + 1] : undefined;
-const entradaArg = args.find((a, i) => !a.startsWith('--') && (iSaida < 0 || i !== iSaida + 1));
+const entradaArg = args.find((a, i) => !a.startsWith('--') && (iSaida < 0 || i !== iSaida + 1) && (!args.includes('--fim') || i !== args.indexOf('--fim') + 1));
 const base = process.env.INIT_CWD ?? process.cwd();
 
 if (!entradaArg) {
@@ -178,7 +180,7 @@ function gerarVozesGemini(grupos, pastaCache) {
 
 // ---------- tempos ("fim-da-narracao", "palavra:Camberra+0.3"...) ----------
 
-const CAMPOS_TEMPO = ['entraEm', 'saiEm', 'comecaEm', 'revelarEm', 'em', 'chacoalhaEm', 'calorEm', 'ondasEm', 'quentesEm', 'friosEm'];
+const CAMPOS_TEMPO = ['entraEm', 'saiEm', 'comecaEm', 'revelarEm', 'em', 'chacoalhaEm', 'calorEm', 'ondasEm', 'quentesEm', 'friosEm', 'circuloEm', 'novoEm', 'crescerEm', 'entraA', 'entraB'];
 
 function resolverTempo(valor, ctx, onde) {
   if (typeof valor === 'number') return valor;
@@ -216,6 +218,10 @@ function resolverTempo(valor, ctx, onde) {
 function resolverPeca(peca, ctx, onde) {
   const r = { ...peca };
   for (const campo of CAMPOS_TEMPO) if (r[campo] !== undefined) r[campo] = arred(resolverTempo(r[campo], ctx, `${onde}, campo "${campo}"`));
+  if (r.lado && typeof r.lado === 'object') {
+    r.lado = { ...r.lado };
+    for (const campo of ['cinzaEm', 'forteEm']) if (r.lado[campo] !== undefined) r.lado[campo] = arred(resolverTempo(r.lado[campo], ctx, `${onde}, lado.${campo}`));
+  }
   if (Array.isArray(r.tempos)) r.tempos = r.tempos.map((t, i) => arred(resolverTempo(t, ctx, `${onde}, tempos[${i}]`)));
   return r;
 }
@@ -419,7 +425,7 @@ async function principal() {
   const composition = await selectComposition({ serveUrl, id: 'Video', inputProps: props });
 
   // quadros: um no gancho (0,6 s) e um perto do fim de cada cena
-  const momentos = [0.6, ...props.cenas.map((c) => c.inicio + c.duracao * 0.8)];
+  const momentos = [0.6, ...props.cenas.map((c) => c.inicio + c.duracao * FRACAO_QUADRO)];
   rmSync(pastaQuadros, { recursive: true, force: true });
   mkdirSync(pastaQuadros, { recursive: true });
   // "angle" liga o WebGL no Chrome sem tela (necessário para o palco 3D)

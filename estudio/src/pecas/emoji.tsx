@@ -24,15 +24,38 @@ export function useMovimento(movimento: Movimento | undefined): string {
   }
 }
 
-type Dados = { emoji: string; tamanho?: number; movimento?: Movimento };
+type Lado = {
+  emoji: string;
+  tamanho?: number;
+  movimento?: Movimento;
+  cinzaEm?: number; // s: a partir daqui o emoji perde a cor
+  forteEm?: number; // s: a partir daqui o movimento fica mais forte (tremer/flutuar x2,5)
+};
+type Dados = { emoji: string; tamanho?: number; movimento?: Movimento; lado?: Lado };
+
+const EmojiLado: React.FC<{ l: Lado; estilo: PropsPeca['estilo'] }> = ({ l, estilo }) => {
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  const t = frame / fps;
+  const mov = useMovimento(l.movimento ?? 'flutuar');
+  const forte = l.forteEm !== undefined && t >= l.forteEm;
+  const cinza = l.cinzaEm !== undefined && t >= l.cinzaEm;
+  const extra = forte ? `translateX(${Math.sin(t * 28) * 22}px) rotate(${Math.sin(t * 24) * 14}deg)` : '';
+  return (
+    <div style={{ transform: `${mov} ${extra}`, filter: cinza ? 'grayscale(1) brightness(1.1)' : undefined }}>
+      <EmojiArte emoji={l.emoji} tamanho={l.tamanho ?? 160} estilo={estilo} />
+    </div>
+  );
+};
 
 export const Emoji: React.FC<PropsPeca<Dados>> = ({ dados, estilo }) => {
   const transform = useMovimento(dados.movimento);
   return (
-    <div style={{ display: 'flex', justifyContent: 'center' }}>
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 40 }}>
       <div style={{ transform }}>
         <EmojiArte emoji={dados.emoji} tamanho={dados.tamanho ?? 320} estilo={estilo} />
       </div>
+      {dados.lado ? <EmojiLado l={dados.lado} estilo={estilo} /> : null}
     </div>
   );
 };

@@ -2,7 +2,7 @@
 name: cacadora-virais
 description: Carla, caçadora de virais (fase de crescimento). Descobre os FORMATOS de vídeo curto (quiz, curiosidade, teste etc.) que estão viralizando hoje no Brasil, em fontes públicas, e entrega 5 pautas do dia em crescimento/pautas/. Chamada pelo /turno-crescimento, no começo do turno.
 tools: Read, Write, Edit, Glob, Grep, Bash, WebSearch, WebFetch
-model: sonnet
+model: opus
 effort: medium
 ---
 

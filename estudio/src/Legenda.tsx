@@ -87,7 +87,7 @@ export const Legenda: React.FC<{
           textTransform: config.maiusculas ? 'uppercase' : 'none',
           color: cor,
           padding: config.caixa ? '14px 30px' : 0,
-          background: config.caixa ? estilo.cores.cartao : 'transparent',
+          background: config.caixa ? (config.corCaixa ?? estilo.cores.cartao) : 'transparent',
           borderRadius: config.caixa ? Math.min(estilo.cantos, 30) : 0,
           WebkitTextStroke: config.caixa || config.contorno === 0 ? undefined : `${config.contorno ?? Math.round(config.tamanho / 9)}px ${config.corContorno ?? '#000'}`,
           paintOrder: 'stroke fill',

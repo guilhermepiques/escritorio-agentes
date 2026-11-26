@@ -50,6 +50,7 @@ export type Legenda = {
   maiusculas: boolean;
   contorno?: number; // px do contorno da letra (0 = sem contorno); padrão tamanho/9
   corContorno?: string; // padrão preto
+  corCaixa?: string; // fundo da caixa (padrão: cor do cartão)
 };
 
 export type Palavra = { texto: string; inicio: number; fim: number };

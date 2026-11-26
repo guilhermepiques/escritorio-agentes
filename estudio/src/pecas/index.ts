@@ -6,6 +6,8 @@
 import type React from 'react';
 import type { PropsPeca } from '../tipos';
 import { Asa } from './asa';
+import { Calendario } from './calendario';
+import { Carimbo } from './carimbo';
 import { Chamada } from './chamada';
 import { Comparacao } from './comparacao';
 import { Cronometro } from './cronometro';
@@ -21,6 +23,7 @@ import { Molecula } from './molecula';
 import { Numero } from './numero';
 import { Ondas } from './ondas';
 import { Pergunta } from './pergunta';
+import { Placar } from './placar';
 import { Prato } from './prato';
 import { Selo } from './selo';
 import { Texto } from './texto';
@@ -46,4 +49,7 @@ export const REGISTRO: Record<string, React.FC<PropsPeca<any>>> = {
   'molecula': Molecula,
   'forno': Forno,
   'ondas': Ondas,
+  'calendario': Calendario,
+  'carimbo': Carimbo,
+  'placar': Placar,
 };

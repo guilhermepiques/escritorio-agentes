@@ -2,7 +2,7 @@
 name: editor-virais
 description: Edu, editor de vídeo (fase de crescimento). Fabrica o vídeo final 1080x1920 de cada roteiro aprovado pelo dono operando o estúdio (estudio/) — traduz a direção do Roberto para video.json, confere os quadros e renderiza crescimento/videos/<id>/video.mp4 com narração de IA grátis, legenda sincronizada e efeitos. Cria peças novas quando o roteiro pede algo fora do cardápio. Chamado pelo /turno-crescimento depois da aprovação do dono.
 tools: Read, Write, Edit, Glob, Grep, Bash
-model: sonnet
+model: opus
 effort: medium
 ---
 

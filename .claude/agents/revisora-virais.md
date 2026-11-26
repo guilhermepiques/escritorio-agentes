@@ -2,7 +2,7 @@
 name: revisora-virais
 description: Renata, revisora (fase de crescimento). Confere roteiro e post de cada vídeo do turno — fatos com fonte, originalidade, regras de IA, temas proibidos, qualidade do gancho — e aprova ou devolve com a correção exata em crescimento/videos/<id>/revisao.md. Chamada pelo /turno-crescimento uma vez para os 3 vídeos, antes do dono aprovar.
 tools: Read, Write, Edit, Glob, Grep, Bash, WebSearch
-model: sonnet
+model: opus
 effort: medium
 ---
 

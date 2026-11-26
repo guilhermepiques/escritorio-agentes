@@ -20,3 +20,21 @@ Formato de cada item:
 - Por que prende: cada "só que" abre uma pergunta nova antes de fechar a anterior, e a pessoa aprende os nomes técnicos sem perceber.
 - Visto em: 2026-11-25 — YouTube Shorts "Como funciona o ASFALTO?" (referência enviada pelo dono; copiar o formato, nunca o vídeo)
 - Nossos vídeos: 2026-11-25-aviao-no-ar, 2026-11-25-micro-ondas, 2026-11-25-fone-cancelamento (testes em 2D, reprovados pelo dono: "simples demais")
+
+### Quiz com contagem regressiva
+- Estrutura: 5 perguntas, 3 s de relógio cada, opções A/B/C, resposta com marca de certo/errado e placar no fim com convite para comentar a nota.
+- Por que prende: o relógio força a pessoa a chutar e ela quer saber se acertou.
+- Visto em: 2026-11-26 — sinal fraco (formato recorrente; sem número confirmado hoje)
+- Nossos vídeos: ainda nenhum
+
+### Mito ou verdade
+- Estrutura: afirmação na tela, 2 s de suspense, carimbo "MITO" ou "VERDADE" e uma frase de explicação; placar acumulado.
+- Por que prende: desmentir o que a pessoa aprendeu cria surpresa e vontade de discordar nos comentários.
+- Visto em: 2026-11-26 — sinal fraco (formato recorrente)
+- Nossos vídeos: ainda nenhum
+
+### Comparação de escala
+- Estrutura: um objeto pequeno de referência e a câmera recuando por objetos cada vez maiores, com contador na tela.
+- Por que prende: a surpresa cresce a cada recuo e o número final é impactante.
+- Visto em: 2026-11-26 — sinal fraco (formato recorrente)
+- Nossos vídeos: ainda nenhum

@@ -14,14 +14,15 @@ const PecaAnimada: React.FC<{ peca: Peca; cena: TCena; volumeEfeitos: number }> 
   // numa cena "continua" as peças já estão no lugar, exceto as que têm `entraEm` (entram nesse momento)
   const continua = cena.entrada === 'continua' && peca.entraEm === undefined;
   const animacao = (peca.animacao as TCena['estilo']['animacao']) ?? cena.estilo.animacao;
-  const entrada = useEntrada(animacao, peca.entraEm ?? 0, continua);
+  const semEntrada = continua || peca.animacao === 'nenhuma'; // 'nenhuma': a peça cuida da própria entrada
+  const entrada = useEntrada(animacao, peca.entraEm ?? 0, semEntrada);
   const Comp = REGISTRO[peca.tipo];
   const saida = peca.saiEm !== undefined ? interpolate(frame, [peca.saiEm * fps, peca.saiEm * fps + 6], [1, 0], clamp) : 1;
   if (!Comp) {
     return <div style={{ background: '#fff', color: 'red', fontSize: 50, padding: 20 }}>PEÇA DESCONHECIDA: {peca.tipo}</div>;
   }
   return (
-    <div style={{ width: '100%', ...entrada, opacity: (entrada.opacity as number | undefined ?? 1) * saida }}>
+    <div style={{ width: '100%', marginTop: peca.margemTopo as number | undefined, marginLeft: peca.margemEsquerda as number | undefined, ...entrada, opacity: (entrada.opacity as number | undefined ?? 1) * saida }}>
       <Comp dados={peca} estilo={cena.estilo} duracaoCena={cena.duracao} volumeEfeitos={volumeEfeitos} continua={continua} />
     </div>
   );

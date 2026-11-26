@@ -12,9 +12,11 @@ type Dados = {
   meio?: string; // texto do selo do meio (padrão "OU")
   porcentagens?: [number, number];
   revelarEm?: number;
+  entraA?: number; // s: quando a metade de cima entra (sem isso, já está lá)
+  entraB?: number; // s: quando a metade de baixo entra
 };
 
-export const Comparacao: React.FC<PropsPeca<Dados>> = ({ dados, estilo }) => {
+export const Comparacao: React.FC<PropsPeca<Dados>> = ({ dados, estilo, continua }) => {
   const frame = useCurrentFrame();
   const { fps } = useVideoConfig();
   const t = frame / fps;
@@ -25,6 +27,8 @@ export const Comparacao: React.FC<PropsPeca<Dados>> = ({ dados, estilo }) => {
   const cartao = (lado: Lado, i: number) => {
     const pct = dados.porcentagens?.[i] ?? 0;
     const cor = i === 0 ? estilo.cores.destaque : estilo.cores.destaque2;
+    const quando = i === 0 ? dados.entraA : dados.entraB;
+    const ent = quando === undefined || continua ? 1 : interpolate(t, [quando, quando + 0.25], [0, 1], clamp);
     return (
       <div
         key={i}
@@ -37,7 +41,8 @@ export const Comparacao: React.FC<PropsPeca<Dados>> = ({ dados, estilo }) => {
           alignItems: 'center',
           gap: 26,
           minHeight: 250,
-          transform: rev > 0 && i === vencedor ? `scale(${1 + 0.04 * rev})` : undefined,
+          opacity: ent,
+          transform: `${rev > 0 && i === vencedor ? `scale(${1 + 0.04 * rev})` : ''} translateY(${(1 - ent) * 60}px)`,
         }}
       >
         <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: `${pct * rev}%`, background: cor, opacity: 0.35 }} />

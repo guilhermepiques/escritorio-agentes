@@ -14,6 +14,7 @@ type Dados = {
   casas?: number;
   tamanho?: string | number;
   cor?: string;
+  milhar?: boolean; // separador de milhar (padrão sim; use false em anos: 2010)
 };
 
 export const Numero: React.FC<PropsPeca<Dados>> = ({ dados, estilo, continua }) => {
@@ -25,11 +26,11 @@ export const Numero: React.FC<PropsPeca<Dados>> = ({ dados, estilo, continua }) 
     ? dados.ate
     : interpolate(frame / fps, [comeca, comeca + dur], [dados.de ?? 0, dados.ate], { ...clamp, easing: Easing.out(Easing.cubic) });
   const casas = dados.casas ?? 0;
-  const texto = v.toLocaleString('pt-BR', { minimumFractionDigits: casas, maximumFractionDigits: casas });
+  const texto = v.toLocaleString('pt-BR', { minimumFractionDigits: casas, maximumFractionDigits: casas, useGrouping: dados.milhar !== false });
   const tam = tamanho(dados.tamanho, 240);
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
-      <div style={{ ...estiloTitulo(estilo, { cor: dados.cor ?? estilo.cores.destaque, tamanho: tam, texto: `${dados.prefixo ?? ''}${dados.ate.toLocaleString('pt-BR')}${dados.sufixo ?? ''}`, maxLinhas: 1 }), lineHeight: 1 }}>
+      <div style={{ ...estiloTitulo(estilo, { cor: dados.cor ?? estilo.cores.destaque, tamanho: tam, texto: `${dados.prefixo ?? ''}${dados.ate.toLocaleString('pt-BR', { useGrouping: dados.milhar !== false })}${dados.sufixo ?? ''}`, maxLinhas: 1 }), lineHeight: 1 }}>
         {dados.prefixo ?? ''}
         {texto}
         {dados.sufixo ?? ''}
