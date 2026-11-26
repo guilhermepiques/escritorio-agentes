@@ -1,0 +1,31 @@
+# Dados privados (DECISOES.md, seção 6) — nunca vão para o GitHub
+crescimento/*
+!crescimento/pautas/
+!crescimento/videos/
+crescimento/pautas/*
+crescimento/videos/*
+!crescimento/**/.gitkeep
+producao/
+metricas/
+relatorios/
+estado/agentes/*.json
+estado/eventos.jsonl
+conhecimento/aprendizados.md
+conhecimento/preferencias-do-dono.md
+privado/
+.env
+*.key
+.claude/settings.local.json
+
+# Arquivos temporários
+*.tmp
+*.log
+node_modules/
+.impeccable/
+
+# Estúdio de vídeo
+estudio/.trabalho/
+estudio/saida/
+
+# Escritório visual (o log mostra o IP do PC na rede de casa)
+escritorio/servidor.log

@@ -1,0 +1,547 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Escritório visual: 3 plantas para escolher</title>
+<style>
+  body { margin: 0; background: #17151c; color: #ece8f2; font-family: system-ui, "Segoe UI", sans-serif; }
+  main { max-width: 1200px; margin: 0 auto; padding: 24px; }
+  h1 { font-size: 22px; font-weight: 600; margin: 0 0 6px; }
+  .sub { color: #a9a3b6; margin: 0 0 28px; line-height: 1.5; }
+  section { margin-bottom: 44px; }
+  h2 { font-size: 18px; font-weight: 600; margin: 0 0 6px; }
+  section p { color: #a9a3b6; margin: 0 0 12px; line-height: 1.5; }
+  canvas { width: 100%; height: auto; image-rendering: pixelated; border-radius: 8px; display: block; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Escritório visual: 3 plantas</h1>
+  <p class="sub">Esboço de onde fica cada sala e cada móvel, visto de cima. A arte final ganha mais detalhe e animação.
+    A Samanta está na copa jogando videogame só para mostrar como fica alguém livre.</p>
+  <div id="versoes"></div>
+</main>
+<script>
+// Esboço das plantas do escritório. Tudo é desenhado em código, retângulo por retângulo (sem imagens de terceiros).
+const T = 16;      // tamanho de um bloco, em pixels de arte
+const S = 3;       // cada pixel de arte vira S pixels na tela
+const PAREDE = 4;  // espessura da parede vista de cima
+const FACE = 28;   // altura da parede do fundo de cada sala
+let ctx;
+let etiquetas = [];
+
+function R(x, y, w, h, c) {
+  ctx.fillStyle = c;
+  ctx.fillRect(Math.round(x), Math.round(y), Math.round(w), Math.round(h));
+}
+function sorte(semente) {
+  let s = Math.max(1, Math.floor(semente) % 2147483647);
+  return () => (s = (s * 16807) % 2147483647) / 2147483647;
+}
+function texto(t, x, y, tam, cor, peso = 'bold') {
+  ctx.font = `${peso} ${tam}px system-ui, "Segoe UI", sans-serif`;
+  ctx.fillStyle = cor;
+  ctx.textBaseline = 'top';
+  ctx.fillText(t, x, y);
+}
+function larguraTexto(t, tam) {
+  ctx.font = `bold ${tam}px system-ui, "Segoe UI", sans-serif`;
+  return ctx.measureText(t).width;
+}
+
+// ---------- pisos ----------
+function pisoConcreto(x, y, w, h, base = '#d6d0c6') {
+  R(x, y, w, h, base);
+  const r = sorte(x * 31 + y * 17 + 7);
+  for (let i = 0; i < (w * h) / 70; i++)
+    R(x + Math.floor(r() * w), y + Math.floor(r() * h), 1, 1, r() < 0.5 ? '#cbc4b9' : '#e2ddd5');
+}
+function pisoMadeira(x, y, w, h, base, linha) {
+  R(x, y, w, h, base);
+  for (let yy = y, n = 0; yy < y + h; yy += 5, n++) {
+    R(x, yy, w, 1, linha);
+    for (let xx = x + ((n * 13) % 37); xx < x + w; xx += 37) R(xx, yy, 1, Math.min(5, y + h - yy), linha);
+  }
+}
+function pisoXadrez(x, y, w, h, a, b, t) {
+  for (let yy = 0; yy < h; yy += t)
+    for (let xx = 0; xx < w; xx += t)
+      R(x + xx, y + yy, Math.min(t, w - xx), Math.min(t, h - yy), (Math.floor(xx / t) + Math.floor(yy / t)) % 2 ? a : b);
+}
+function pisoGrade(x, y, w, h, base, linha, t) {
+  R(x, y, w, h, base);
+  for (let xx = x; xx < x + w; xx += t) R(xx, y, 1, h, linha);
+  for (let yy = y; yy < y + h; yy += t) R(x, yy, w, 1, linha);
+}
+
+const ESTILO = {
+  gerente:     { piso: (x, y, w, h) => pisoMadeira(x, y, w, h, '#6b4a35', '#5a3d2b'), parede: '#33415a', rodape: '#232d40' },
+  estudio:     { piso: (x, y, w, h) => pisoGrade(x, y, w, h, '#24222e', '#2e2b3c', 16), parede: '#2a2638', rodape: '#1c1a26' },
+  crescimento: { piso: (x, y, w, h) => pisoXadrez(x, y, w, h, '#c9d1dc', '#bec7d3', 16), parede: '#e6ebef', rodape: '#c2c9d0' },
+  copa:        { piso: (x, y, w, h) => pisoXadrez(x, y, w, h, '#f1e4cc', '#e3d0b0', 8), parede: '#cfe6d8', rodape: '#a9c8b5' },
+  produtos:    { piso: (x, y, w, h) => pisoConcreto(x, y, w, h, '#e3ded5'), parede: '#dcd6cc', rodape: '#bfb8ac' },
+};
+
+// ---------- gente ----------
+const AG = {
+  gerson:  { nome: 'Gerson',  camisa: '#868E96', cabelo: '#cfd3d8', pele: '#e8b896' },
+  carla:   { nome: 'Carla',   camisa: '#E8590C', cabelo: '#6b2f17', pele: '#f1c7a3' },
+  roberto: { nome: 'Roberto', camisa: '#4263EB', cabelo: '#2b2430', pele: '#c68b62' },
+  samanta: { nome: 'Samanta', camisa: '#D6336C', cabelo: '#e0a84a', pele: '#f3cfb0' },
+  renata:  { nome: 'Renata',  camisa: '#2F9E44', cabelo: '#3b2418', pele: '#8d5a3b' },
+  edu:     { nome: 'Edu',     camisa: '#F59F00', cabelo: '#1f1a1a', pele: '#d9a27a' },
+};
+function sentadoCostas(x, y, a) { // tronco visto de trás, 12x15
+  R(x + 2, y, 8, 9, a.cabelo); R(x + 1, y + 1, 1, 6, a.cabelo); R(x + 10, y + 1, 1, 6, a.cabelo);
+  R(x + 1, y + 5, 1, 2, a.pele); R(x + 10, y + 5, 1, 2, a.pele);
+  R(x + 1, y + 9, 10, 6, a.camisa); R(x, y + 10, 1, 4, a.camisa); R(x + 11, y + 10, 1, 4, a.camisa);
+  R(x + 1, y + 9, 10, 1, 'rgba(255,255,255,.25)');
+}
+function sentadoFrente(x, y, a, gravata) { // tronco de frente, 12x17
+  R(x + 2, y + 1, 8, 8, a.pele); R(x + 2, y, 8, 3, a.cabelo); R(x + 1, y + 1, 1, 5, a.cabelo); R(x + 10, y + 1, 1, 5, a.cabelo);
+  R(x + 4, y + 5, 1, 2, '#2b2430'); R(x + 7, y + 5, 1, 2, '#2b2430'); R(x + 5, y + 8, 2, 1, '#b5735f');
+  R(x + 1, y + 9, 10, 8, a.camisa); R(x, y + 10, 1, 6, a.camisa); R(x + 11, y + 10, 1, 6, a.camisa);
+  if (gravata) { R(x + 4, y + 9, 4, 3, '#f1f3f5'); R(x + 5, y + 10, 2, 6, '#9c2a2a'); }
+}
+function etiqueta(cx, y, a) { etiquetas.push([cx, y, a]); }
+function desenharEtiquetas() {
+  for (const [cx, y, a] of etiquetas) {
+    const w = Math.ceil(larguraTexto(a.nome, 5)) + 5;
+    R(cx - w / 2, y, w, 8, 'rgba(20,18,26,.88)'); R(cx - w / 2, y + 8, w, 1, a.camisa);
+    texto(a.nome, cx - w / 2 + 2.5, y + 1.3, 5, '#ffffff');
+  }
+  etiquetas = [];
+}
+
+// ---------- móveis gerais ----------
+function planta(x, y) { // 12x18
+  R(x + 1, y + 4, 10, 8, '#3f8f4a'); R(x + 3, y + 1, 6, 4, '#4fae5b'); R(x, y + 6, 2, 4, '#2f6f3a'); R(x + 10, y + 6, 2, 4, '#2f6f3a');
+  R(x + 3, y + 5, 2, 2, '#6cc777'); R(x + 7, y + 7, 2, 2, '#6cc777'); R(x + 5, y + 2, 2, 2, '#7fd88a');
+  R(x + 2, y + 11, 8, 2, '#8c4a28'); R(x + 3, y + 13, 6, 5, '#b5653a'); R(x + 3, y + 13, 6, 1, '#d27d4b');
+}
+function plantaGrande(x, y) { // 16x26
+  R(x + 2, y + 4, 12, 12, '#2f7a3c'); R(x + 4, y, 8, 6, '#3f9a4c'); R(x, y + 8, 4, 6, '#276633'); R(x + 12, y + 8, 4, 6, '#276633');
+  R(x + 5, y + 5, 3, 3, '#5fc06c'); R(x + 9, y + 9, 3, 3, '#5fc06c');
+  R(x + 3, y + 16, 10, 2, '#2b2430'); R(x + 4, y + 18, 8, 8, '#4a4450'); R(x + 4, y + 18, 8, 1, '#6a6470');
+}
+function janela(x, y, w, h) {
+  R(x, y, w, h, '#f4f1ea'); R(x + 2, y + 2, w - 4, h - 4, '#9fd4ee');
+  R(x + 2, y + 2 + Math.floor((h - 4) / 2), w - 4, 1, '#f4f1ea'); R(x + Math.floor(w / 2), y + 2, 1, h - 4, '#f4f1ea');
+  R(x + 4, y + 4, 3, 1, '#d8f0fb'); R(x + 4, y + 5, 1, 2, '#d8f0fb'); R(x, y + h, w, 2, '#cfc8bc');
+}
+function janelaCidade(x, y, w, h) {
+  R(x, y, w, h, '#1d2433'); R(x + 1, y + 1, w - 2, h - 2, '#f2b880'); R(x + 1, y + 1, w - 2, Math.floor(h / 2), '#8fb8e0');
+  const r = sorte(x * 13 + 5);
+  let xx = x + 1;
+  while (xx < x + w - 1) {
+    const bw = Math.min(4 + Math.floor(r() * 7), x + w - 1 - xx), bh = 5 + Math.floor(r() * (h - 7));
+    R(xx, y + h - 1 - bh, bw, bh, '#4b5f86');
+    for (let k = 2; k < bh - 1; k += 3) for (let j = 1; j < bw - 1; j += 2) if (r() < 0.45) R(xx + j, y + h - 1 - bh + k, 1, 1, '#ffe08a');
+    xx += bw + 1;
+  }
+  for (let i = 1; i < 4; i++) R(x + Math.floor((w * i) / 4), y + 1, 1, h - 2, '#1d2433');
+  R(x, y + h, w, 2, '#c9a24a');
+}
+function quadroBranco(x, y, w, h) {
+  R(x, y, w, h, '#9aa1a9'); R(x + 1, y + 1, w - 2, h - 2, '#fbfbfc');
+  const cs = ['#ffd43b', '#ff8fab', '#74c0fc', '#8ce99a'];
+  for (let i = 0; i < 6; i++) R(x + 4 + (i % 3) * 7, y + 3 + Math.floor(i / 3) * 6, 5, 4, cs[i % 4]);
+  R(x + w - 20, y + 4, 14, 1, '#4263eb'); R(x + w - 20, y + 7, 9, 1, '#e8590c'); R(x + w - 20, y + 10, 12, 1, '#2f9e44');
+  R(x + 2, y + h, w - 4, 2, '#7d848c');
+}
+function relogio(x, y) {
+  R(x + 1, y, 6, 8, '#2b2430'); R(x, y + 1, 8, 6, '#2b2430'); R(x + 1, y + 1, 6, 6, '#f8f8f8');
+  R(x + 4, y + 2, 1, 2, '#2b2430'); R(x + 4, y + 4, 2, 1, '#2b2430');
+}
+function cadeira(x, y, c) { // encosto visto de trás, 14x12
+  R(x + 1, y, 12, 8, c); R(x + 1, y, 12, 1, 'rgba(255,255,255,.25)'); R(x, y + 1, 1, 6, c); R(x + 13, y + 1, 1, 6, c);
+  R(x + 6, y + 8, 2, 2, '#2b2430'); R(x + 2, y + 10, 10, 1, '#2b2430'); R(x + 2, y + 11, 1, 1, '#2b2430'); R(x + 11, y + 11, 1, 1, '#2b2430');
+}
+function bebedouro(x, y) { // 12x22
+  R(x + 2, y, 8, 8, '#a5d8ff'); R(x + 3, y + 1, 2, 4, '#d0ebff');
+  R(x + 1, y + 8, 10, 14, '#e9ecef'); R(x + 1, y + 8, 10, 1, '#ced4da'); R(x + 3, y + 11, 2, 1, '#1c7ed6'); R(x + 7, y + 11, 2, 1, '#e03131');
+}
+function impressora(x, y) { R(x, y + 4, 18, 10, '#dee2e6'); R(x, y + 4, 18, 1, '#f1f3f5'); R(x + 3, y, 12, 5, '#f8f9fa'); R(x + 3, y + 9, 12, 2, '#495057'); R(x + 14, y + 6, 2, 1, '#40c057'); R(x + 1, y + 14, 16, 6, '#adb5bd'); }
+
+// ---------- telas de cada cargo ----------
+const TELAS = {
+  carla:   (x, y, w, h) => { R(x, y, w, h, '#101018'); ['#ff6b6b', '#ffd43b', '#4dabf7'].forEach((c, i) => { R(x + 1 + i * 6, y + 1, 5, h - 2, c); R(x + 2 + i * 6, y + 3, 3, 2, '#fff'); }); },
+  roberto: (x, y, w, h) => { R(x, y, w, h, '#f8f9fa'); for (let i = 0; i < 4; i++) R(x + 2, y + 2 + i * 2, w - 4 - (i % 2) * 5, 1, '#495057'); },
+  samanta: (x, y, w, h) => { R(x, y, w, h, '#ffdeeb'); R(x + 2, y + 2, 5, 7, '#d6336c'); R(x + 3, y + 3, 3, 4, '#fff'); R(x + 9, y + 3, 1, 6, '#d6336c'); R(x + 12, y + 3, 1, 6, '#d6336c'); R(x + 8, y + 4, 6, 1, '#d6336c'); R(x + 8, y + 7, 6, 1, '#d6336c'); },
+  renata:  (x, y, w, h) => { R(x, y, w, h, '#ebfbee'); for (let i = 0; i < 3; i++) { R(x + 2, y + 2 + i * 3, 2, 2, i === 1 ? '#e03131' : '#2f9e44'); R(x + 6, y + 2 + i * 3, w - 8, 1, '#868e96'); } },
+  edu:     (x, y, w, h) => { R(x, y, w, h, '#15131c'); R(x + 2, y + 1, w - 4, h - 6, '#4dabf7'); R(x + 4, y + 3, 4, 3, '#ffd43b'); R(x + 1, y + h - 4, w - 2, 1, '#7950f2'); R(x + 2, y + h - 3, 7, 2, '#9775fa'); R(x + 10, y + h - 3, Math.max(2, w - 12), 2, '#20c997'); },
+  painel:  (x, y, w, h) => { R(x, y, w, h, '#121a24'); const n = 6, bw = Math.floor((w - 4) / n); [3, 6, 4, 8, 9, 12].forEach((v, i) => { v = Math.min(v, h - 3); R(x + 2 + i * bw, y + h - 1 - v, bw - 1, v, i === n - 1 ? '#40c057' : '#339af0'); }); R(x + 2, y + 2, 10, 1, '#ced4da'); },
+};
+function mesaTrabalho(x, y, w, tela) { // y = topo do tampo
+  R(x, y, w, 10, '#c8976a'); R(x, y, w, 1, '#e0b68a'); R(x, y + 10, w, 6, '#8b5e3c'); R(x, y + 10, w, 1, '#6f4a2f');
+  R(x + 1, y + 16, 2, 4, '#5a3b27'); R(x + w - 3, y + 16, 2, 4, '#5a3b27');
+  const mx = Math.round(x + w / 2 - 10);
+  R(mx, y - 12, 20, 14, '#2b2430'); tela(mx + 1, y - 11, 18, 11); R(mx + 8, y + 2, 4, 2, '#2b2430');
+  R(x + w / 2 - 6, y + 5, 12, 3, '#eceef2'); R(x + w / 2 + 8, y + 5, 3, 4, '#eceef2');
+  R(x + 3, y + 3, 4, 5, '#f1e6c8');
+}
+function posto(x, y, w, tela, a, ocupado = true) { // mesa + pessoa de costas + cadeira
+  mesaTrabalho(x, y, w, tela);
+  const px = Math.round(x + w / 2 - 6);
+  if (ocupado) { sentadoCostas(px, y + 9, a); etiqueta(x + w / 2, y - 23, a); }
+  cadeira(px - 1, y + 17, '#3b3f4e');
+}
+
+// ---------- sala do gerente ----------
+function estante(x, y, w, h) {
+  R(x, y, w, h, '#5b3a29'); R(x + 2, y + 2, w - 4, h - 4, '#3e271b');
+  const r = sorte(x * 7 + y), cs = ['#c92a2a', '#1971c2', '#e8590c', '#2f9e44', '#f08c00', '#862e9c', '#f1f3f5'];
+  for (let sy = y + 2; sy < y + h - 6; sy += 9) {
+    let bx = x + 3;
+    while (bx < x + w - 4) { const bw = Math.min(2 + Math.floor(r() * 2), x + w - 3 - bx), bh = 5 + Math.floor(r() * 3); R(bx, sy + 8 - bh, bw, bh, cs[Math.floor(r() * cs.length)]); bx += bw + (r() < 0.2 ? 2 : 0); }
+    R(x + 2, sy + 8, w - 4, 1, '#5b3a29');
+  }
+}
+function prateleiraTrofeus(x, y) {
+  R(x, y + 10, 24, 2, '#c9a24a');
+  R(x + 3, y + 2, 6, 4, '#f2c94c'); R(x + 5, y + 6, 2, 2, '#c9a24a'); R(x + 4, y + 8, 4, 2, '#8a6d2c');
+  R(x + 13, y + 3, 8, 7, '#1d2433'); R(x + 14, y + 4, 6, 5, '#f2b880');
+}
+function tapete(x, y, w, h, borda, meio, detalhe) {
+  R(x, y, w, h, borda); R(x + 3, y + 3, w - 6, h - 6, meio); R(x + 5, y + 5, w - 10, h - 10, borda); R(x + 6, y + 6, w - 12, h - 12, meio);
+  const cx = Math.round(x + w / 2), cy = Math.round(y + h / 2);
+  for (let i = 0; i < 7; i++) { R(cx - i * 2 - 1, cy - 7 + i, i * 4 + 2, 1, detalhe); R(cx - i * 2 - 1, cy + 7 - i, i * 4 + 2, 1, detalhe); }
+}
+function mesaExecutiva(x, y, w, a) {
+  const cx = Math.round(x + w / 2);
+  R(cx - 9, y - 24, 18, 22, '#1f1c24'); R(cx - 8, y - 23, 16, 20, '#2c2833'); R(cx - 8, y - 23, 16, 1, '#4a4555');
+  sentadoFrente(cx - 6, y - 16, a, true); etiqueta(cx, y - 35, a);
+  R(x, y, w, 12, '#5b3a29'); R(x, y, w, 1, '#7a5039'); R(x, y + 12, w, 9, '#40281c'); R(x, y + 13, w, 1, '#c9a24a');
+  R(x + 2, y + 21, 3, 3, '#2b1b13'); R(x + w - 5, y + 21, 3, 3, '#2b1b13');
+  R(cx - 7, y + 2, 14, 7, '#c9ced6'); R(cx - 6, y + 3, 12, 5, '#4dabf7'); R(cx - 7, y + 9, 14, 2, '#adb5bd');
+  R(x + 4, y - 6, 7, 3, '#c9a24a'); R(x + 6, y - 3, 2, 6, '#8a6d2c'); R(x + 4, y + 3, 6, 2, '#8a6d2c');
+  R(x + w - 15, y + 3, 8, 6, '#f8f9fa'); R(x + w - 14, y + 4, 6, 1, '#adb5bd'); R(x + w - 6, y + 3, 3, 4, '#e9ecef');
+}
+function poltronaCostas(x, y, c, esc) { R(x, y, 16, 12, esc); R(x + 1, y + 1, 14, 9, c); R(x + 1, y + 1, 14, 1, 'rgba(255,255,255,.2)'); R(x - 1, y + 4, 3, 9, esc); R(x + 14, y + 4, 3, 9, esc); }
+function sofaCostas(x, y, w, c, esc) {
+  R(x, y, w, 14, esc); R(x + 1, y + 1, w - 2, 10, c); R(x + 1, y + 1, w - 2, 1, 'rgba(255,255,255,.2)');
+  R(x - 3, y + 4, 4, 12, esc); R(x + w - 1, y + 4, 4, 12, esc);
+  for (let i = 1; i < 3; i++) R(x + Math.round((w * i) / 3), y + 2, 1, 8, esc);
+}
+function mesaCentro(x, y, w, h) { R(x, y, w, h, '#1d2433'); R(x + 1, y + 1, w - 2, h - 3, '#bfe3ee'); R(x + 3, y + 2, 5, 1, '#ffffff'); R(x + w - 10, y + 3, 4, 3, '#c9a24a'); }
+function luminaria(x, y) { R(x, y, 10, 6, '#f2e3b3'); R(x + 1, y + 6, 8, 1, '#c9a24a'); R(x + 4, y + 7, 2, 16, '#2b2430'); R(x + 1, y + 23, 8, 2, '#2b2430'); }
+function minibar(x, y) {
+  R(x, y, 22, 16, '#40281c'); R(x, y, 22, 2, '#7a5039'); R(x + 2, y + 5, 8, 9, '#2b1b13'); R(x + 12, y + 5, 8, 9, '#2b1b13'); R(x + 9, y + 9, 1, 2, '#c9a24a'); R(x + 12, y + 9, 1, 2, '#c9a24a');
+  R(x + 3, y - 7, 2, 7, '#2f9e44'); R(x + 7, y - 6, 2, 6, '#c92a2a'); R(x + 11, y - 8, 2, 8, '#f08c00'); R(x + 15, y - 3, 4, 3, '#dee2e6');
+}
+function mesaReuniao(x, y, w) {
+  for (let i = 0; i < 3; i++) { cadeiraPequena(x + 8 + i * Math.floor((w - 24) / 2), y - 9, '#1f1c24'); }
+  R(x, y, w, 16, '#2b1b13'); R(x + 2, y + 1, w - 4, 13, '#6b4a35'); R(x + 2, y + 1, w - 4, 1, '#8a6247'); R(x + w / 2 - 6, y + 5, 12, 5, '#c9a24a');
+  for (let i = 0; i < 3; i++) { cadeiraPequena(x + 8 + i * Math.floor((w - 24) / 2), y + 17, '#1f1c24'); }
+}
+function cadeiraPequena(x, y, c) { R(x, y, 9, 8, c); R(x + 1, y + 1, 7, 1, 'rgba(255,255,255,.2)'); }
+function mobiliarGerente(b) {
+  const cx = Math.round(b.ix + b.iw / 2);
+  estante(b.ix + 4, b.fy - 22, 26, 30);
+  const jw = Math.min(150, b.iw - 76);
+  janelaCidade(cx - Math.floor(jw / 2), b.iy + 3, jw, 18);
+  prateleiraTrofeus(b.ix + b.iw - 30, b.iy + 3);
+  plantaGrande(b.ix + b.iw - 20, b.fy - 10);
+  tapete(cx - 46, b.fy + 8, 92, 58, '#c9a24a', '#7a2e3a', '#e0c27a');
+  mesaExecutiva(cx - 32, b.fy + 26, 64, AG.gerson);
+  poltronaCostas(cx - 26, b.fy + 52, '#2f6f73', '#1f4f52'); poltronaCostas(cx + 10, b.fy + 52, '#2f6f73', '#1f4f52');
+  if (b.fh > 230) mesaReuniao(cx - 36, b.fy + 120, 72);
+  if (b.fh > 110) {
+    const ly = b.fy + b.fh - 20;
+    mesaCentro(cx - 18, ly - 17, 36, 12);
+    sofaCostas(cx - 30, ly, 60, '#a0673f', '#6b432c');
+    luminaria(b.ix + 6, ly - 12);
+    minibar(b.ix + b.iw - 28, ly - 2);
+  }
+}
+
+// ---------- estúdio ----------
+function espuma(x, y, w, h) {
+  R(x, y, w, h, '#2a2638');
+  for (let yy = y + 2; yy < y + h - 6; yy += 7) for (let xx = x + 2; xx < x + w - 6; xx += 7) {
+    R(xx, yy, 6, 6, '#3b3456'); R(xx, yy, 6, 1, '#51487a'); R(xx + 2, yy + 2, 2, 2, '#322b49');
+  }
+}
+function placaNoAr(x, y) { R(x, y, 28, 11, '#1b1922'); R(x + 1, y + 1, 26, 9, '#e03131'); texto('NO AR', x + 3.5, y + 2, 6.5, '#ffffff'); }
+function ilhaEdicao(x, y, w) {
+  const cx = Math.round(x + w / 2), mw = 22;
+  R(x + 2, y - 8, 6, 9, '#1b1922'); R(x + 3, y - 6, 4, 4, '#3b3946'); R(x + w - 8, y - 8, 6, 9, '#1b1922'); R(x + w - 7, y - 6, 4, 4, '#3b3946');
+  R(x, y, w, 11, '#3a3846'); R(x, y, w, 1, '#55536a'); R(x, y + 11, w, 6, '#26242f'); R(x, y + 12, w, 1, '#9775fa');
+  [[cx - mw - mw / 2 - 1, 3], [cx - mw / 2, -1], [cx + mw / 2 + 1, 3]].forEach(([mx, dy]) => {
+    R(mx, y - 13 + dy, mw, 14, '#121018'); TELAS.edu(mx + 1, y - 12 + dy, mw - 2, 11); R(mx + mw / 2 - 2, y + 1 + dy, 4, 2, '#121018');
+  });
+  R(cx - 8, y + 5, 16, 3, '#d0d0dc'); R(cx + 11, y + 4, 11, 5, '#2b2933');
+  for (let i = 0; i < 4; i++) R(cx + 12 + i * 2.5, y + 5, 1, 3, '#ffd43b');
+}
+function microfoneBraco(x, y) {
+  R(x, y, 3, 6, '#1b1922');
+  for (let i = 0; i < 12; i++) R(x + 1 - i, y - i, 2, 1, '#5a5868');
+  R(x - 16, y - 18, 7, 9, '#2b2933'); R(x - 15, y - 17, 5, 7, '#8a8898');
+  R(x - 21, y - 17, 3, 7, '#1b1922'); R(x - 20, y - 16, 1, 5, '#3b3946');
+}
+function telaVerde(x, yTopo, w, fy, fundo) { R(x, yTopo, w, fy - yTopo, '#2fb35a'); R(x, fy, w, fundo, '#3cc46a'); R(x, fy, w, 1, '#28a04f'); R(x - 2, yTopo - 2, w + 4, 3, '#1b1922'); }
+function softbox(x, y) {
+  R(x, y, 12, 10, '#1b1922'); R(x + 1, y + 1, 10, 8, '#fff6d6');
+  R(x + 5, y + 10, 2, 10, '#1b1922'); R(x + 1, y + 20, 10, 1, '#1b1922'); R(x + 1, y + 19, 2, 1, '#1b1922'); R(x + 9, y + 19, 2, 1, '#1b1922');
+}
+function cameraTripe(x, y) {
+  R(x, y, 15, 8, '#1b1922'); R(x + 15, y + 2, 4, 4, '#3b3946'); R(x + 2, y + 2, 2, 2, '#e03131');
+  R(x + 6, y + 8, 2, 10, '#1b1922'); R(x + 2, y + 18, 10, 1, '#1b1922'); R(x + 2, y + 17, 2, 1, '#1b1922'); R(x + 10, y + 17, 2, 1, '#1b1922');
+}
+function claquete(x, y) {
+  R(x, y + 4, 15, 9, '#1b1922'); R(x + 1, y + 7, 13, 1, '#f8f9fa'); R(x + 1, y + 10, 8, 1, '#f8f9fa');
+  for (let i = 0; i < 8; i++) R(x - 1 + i * 2, y + (i % 2), 2, 3, i % 2 ? '#f8f9fa' : '#1b1922');
+}
+function mesinha(x, y, w) { R(x, y, w, 6, '#4a4858'); R(x, y + 6, w, 3, '#2b2933'); R(x + 1, y + 9, 2, 5, '#2b2933'); R(x + w - 3, y + 9, 2, 5, '#2b2933'); }
+function caseEquipamento(x, y) { R(x, y, 16, 12, '#1b1922'); R(x + 1, y + 1, 14, 2, '#3b3946'); R(x + 6, y + 5, 4, 2, '#adb5bd'); R(x, y + 12, 16, 10, '#2b2933'); R(x + 6, y + 15, 4, 2, '#adb5bd'); }
+function cabineGravacao(x, y, w, h) {
+  R(x, y, w, h, '#1b1922'); espuma(x + 2, y + 2, w - 4, h - 4);
+  R(x + 2, y + h - 6, w - 4, 4, '#8ecae6'); R(x + 4, y + h - 5, 6, 1, '#dff3fb');
+  const mx = Math.round(x + w / 2);
+  R(mx - 1, y + h - 24, 2, 16, '#5a5868'); R(mx - 3, y + h - 30, 6, 8, '#8a8898'); R(mx - 6, y + h - 29, 2, 6, '#1b1922');
+  texto('cabine', x + 4, y + 3, 5, '#cfc6ff');
+}
+function ringLight(x, y) { // aro de luz no tripé, 14x30
+  R(x + 3, y, 8, 2, '#fff6d6'); R(x + 3, y + 12, 8, 2, '#fff6d6'); R(x + 1, y + 2, 2, 10, '#fff6d6'); R(x + 11, y + 2, 2, 10, '#fff6d6');
+  R(x + 6, y + 14, 2, 14, '#1b1922'); R(x + 2, y + 28, 10, 1, '#1b1922'); R(x + 2, y + 27, 2, 1, '#1b1922'); R(x + 10, y + 27, 2, 1, '#1b1922');
+}
+function prateleiraEquipamento(x, y) { // estante baixa com lentes, cabos e HDs, 40x24
+  R(x, y, 40, 24, '#1b1922'); R(x + 2, y + 2, 36, 9, '#2b2933'); R(x + 2, y + 13, 36, 9, '#2b2933');
+  R(x + 4, y + 5, 6, 6, '#3b3946'); R(x + 5, y + 6, 4, 4, '#74c0fc'); R(x + 13, y + 6, 9, 5, '#868e96'); R(x + 25, y + 4, 4, 7, '#f59f00'); R(x + 31, y + 7, 5, 4, '#e03131');
+  R(x + 4, y + 16, 10, 6, '#495057'); R(x + 5, y + 17, 1, 1, '#40c057'); R(x + 17, y + 16, 10, 6, '#495057'); R(x + 18, y + 17, 1, 1, '#40c057'); R(x + 30, y + 15, 6, 7, '#7950f2');
+}
+function tvGrandeSuporte(x, y, w) { R(x, y, w, 20, '#121018'); TELAS.edu(x + 1, y + 1, w - 2, 18); R(x + w / 2 - 2, y + 20, 4, 8, '#2b2933'); R(x + w / 2 - 10, y + 28, 20, 2, '#2b2933'); }
+function mobiliarEstudio(b) {
+  espuma(b.ix, b.iy, b.iw, FACE - 3);
+  R(b.ix, b.iy, b.iw, 1, '#b197fc');
+  placaNoAr(b.ix + 8, b.iy + 6);
+  const gsW = Math.min(72, Math.floor(b.iw * 0.36)), gsX = b.ix + b.iw - gsW - 8;
+  telaVerde(gsX, b.iy + 4, gsW, b.fy, 36);
+  softbox(gsX + 2, b.fy + 38); softbox(gsX + gsW - 14, b.fy + 38);
+  cameraTripe(gsX + Math.round(gsW / 2) - 8, b.fy + 50);
+  const ew = Math.min(84, b.iw - gsW - 44), ex = b.ix + 14;
+  ilhaEdicao(ex, b.fy + 18, ew);
+  const px = Math.round(ex + ew / 2 - 6);
+  sentadoCostas(px, b.fy + 27, AG.edu); etiqueta(ex + ew / 2, b.fy - 7, AG.edu);
+  cadeira(px - 1, b.fy + 35, '#5f3dc4');
+  microfoneBraco(ex + ew - 4, b.fy + 20);
+  mesinha(ex + 2, b.fy + 72, 22); claquete(ex + 5, b.fy + 61);
+  caseEquipamento(ex + 32, b.fy + 66);
+  planta(b.ix + 4, b.fy + b.fh - 20);
+  ringLight(ex + ew + 4, b.fy + 30);
+  prateleiraEquipamento(b.ix + b.iw - 46, b.fy + b.fh - 30);
+  if (b.fh > 250) {
+    cabineGravacao(b.ix + 10, b.fy + 130, 76, 64);
+    tvGrandeSuporte(b.ix + b.iw - 74, b.fy + 150, 56);
+    sofaCostas(b.ix + b.iw - 80, b.fy + 196, 64, '#5f3dc4', '#3b2a80');
+    caseEquipamento(b.ix + 12, b.fy + 230); caseEquipamento(b.ix + 32, b.fy + 230);
+    plantaGrande(Math.round(b.ix + b.iw / 2), b.fy + b.fh - 30);
+  }
+}
+
+// ---------- sala de crescimento ----------
+function mobiliarCrescimento(b, livres) {
+  const cx = Math.round(b.ix + b.iw / 2);
+  janela(b.ix + 8, b.iy + 5, 28, 16); quadroBranco(cx - 26, b.iy + 4, 52, 18); janela(b.ix + b.iw - 36, b.iy + 5, 28, 16);
+  relogio(cx + 32, b.iy + 6);
+  const dw = 46, gap = 22, x1 = cx - dw - gap / 2, x2 = cx + gap / 2;
+  const y1 = b.fy + 20, y2 = b.fy + 20 + 54;
+  posto(x1, y1, dw, TELAS.carla, AG.carla, !livres.includes('carla'));
+  posto(x2, y1, dw, TELAS.roberto, AG.roberto, !livres.includes('roberto'));
+  posto(x1, y2, dw, TELAS.samanta, AG.samanta, !livres.includes('samanta'));
+  posto(x2, y2, dw, TELAS.renata, AG.renata, !livres.includes('renata'));
+  planta(b.ix + 4, b.fy + 2); impressora(b.ix + b.iw - 22, b.fy + 2);
+  planta(b.ix + 4, b.fy + b.fh - 20); bebedouro(b.ix + b.iw - 16, b.fy + b.fh - 24);
+}
+
+// ---------- copa ----------
+function bancada(x, y, w) {
+  R(x, y, w, 4, '#8f99a3'); R(x, y, w, 1, '#c3cad1'); R(x, y + 4, w, 12, '#f1f3f5'); R(x, y + 4, w, 1, '#ced4da');
+  for (let i = 0; i < w - 2; i += 12) { R(x + i, y + 4, 1, 12, '#ced4da'); R(x + i + 5, y + 8, 3, 1, '#868e96'); }
+}
+function cafeteira(x, y) { R(x, y - 14, 11, 14, '#2b2430'); R(x + 1, y - 13, 9, 4, '#4a4352'); R(x + 2, y - 12, 2, 1, '#e03131'); R(x + 3, y - 7, 5, 1, '#868e96'); R(x + 3, y - 5, 5, 5, '#f8f9fa'); R(x + 4, y - 4, 3, 2, '#7a4a2a'); }
+function microondas(x, y) { R(x, y - 9, 16, 9, '#dee2e6'); R(x + 1, y - 8, 10, 7, '#343a40'); R(x + 12, y - 7, 3, 5, '#868e96'); }
+function geladeira(x, y) { // y = base
+  R(x, y - 36, 17, 36, '#adb5bd'); R(x + 1, y - 35, 15, 34, '#e9ecef'); R(x + 1, y - 23, 15, 1, '#adb5bd');
+  R(x + 13, y - 32, 1, 6, '#868e96'); R(x + 13, y - 20, 1, 9, '#868e96'); R(x + 3, y - 32, 4, 3, '#ffd43b'); R(x + 8, y - 30, 3, 3, '#ff8fab');
+}
+function cardapio(x, y) { R(x, y, 28, 17, '#3b2f2a'); R(x + 1, y + 1, 26, 15, '#2f3b33'); texto('CAFÉ', x + 4, y + 2.5, 5.5, '#ffe8a3'); R(x + 4, y + 10, 18, 1, '#cfe6d8'); R(x + 4, y + 13, 13, 1, '#cfe6d8'); }
+function banqueta(x, y, c = '#4263eb') { R(x + 1, y, 9, 6, c); R(x + 1, y, 9, 1, 'rgba(255,255,255,.35)'); R(x + 4, y + 6, 3, 4, '#2b2430'); }
+function mesaRedonda(x, y) { // 28x22
+  banqueta(x - 8, y + 4, '#f59f00'); banqueta(x + 27, y + 4, '#2f9e44'); banqueta(x + 9, y - 9, '#d6336c');
+  R(x + 2, y, 24, 14, '#2b2430'); R(x + 3, y + 1, 22, 12, '#d9b88f'); R(x + 3, y + 1, 22, 1, '#ecd2ad');
+  R(x + 12, y + 14, 4, 5, '#5a3b27'); R(x + 8, y + 19, 12, 2, '#5a3b27');
+  R(x + 7, y + 4, 4, 4, '#f8f9fa'); R(x + 8, y + 5, 2, 2, '#7a4a2a'); R(x + 17, y + 6, 3, 3, '#e8590c');
+  banqueta(x + 9, y + 22, '#4263eb');
+}
+function tvGame(x, fy, w) {
+  R(x + 2, fy - 25, w - 4, 17, '#17151c');
+  const sx = x + 3, sy = fy - 24;
+  R(sx, sy, w - 6, 15, '#74c0fc'); R(sx, sy + 11, w - 6, 4, '#51cf66'); R(sx + 6, sy + 7, 3, 4, '#e03131'); R(sx + 16, sy + 4, 5, 3, '#ffd43b'); R(sx + w - 16, sy + 3, 6, 2, '#ffffff');
+  R(x, fy - 6, w, 11, '#5b3a29'); R(x, fy - 6, w, 1, '#7a5039'); R(x + 4, fy - 3, 11, 3, '#e9ecef'); R(x + 18, fy - 3, 7, 3, '#2b2430');
+}
+function puff(x, y, c, esc) { R(x + 2, y, 13, 12, c); R(x, y + 2, 17, 8, c); R(x + 3, y + 1, 6, 2, 'rgba(255,255,255,.3)'); R(x + 1, y + 10, 15, 2, esc); }
+function tapetinho(x, y, w, h) { R(x, y, w, h, '#5c7cfa'); R(x + 2, y + 2, w - 4, h - 4, '#748ffc'); for (let i = 4; i < w - 4; i += 6) R(x + i, y + 2, 2, h - 4, '#6b84f5'); }
+function sofaFrente(x, y, w, c, esc) {
+  R(x, y, w, 7, esc); R(x, y + 7, w, 9, c); R(x + 1, y + 7, w - 2, 1, 'rgba(255,255,255,.25)'); R(x, y + 16, w, 2, esc);
+  R(x - 3, y + 3, 4, 14, esc); R(x + w - 1, y + 3, 4, 14, esc);
+  for (let i = 1; i < 3; i++) R(x + Math.round((w * i) / 3), y + 8, 1, 7, esc);
+}
+function maquinaSalgadinho(x, y) { // y = base
+  R(x, y - 34, 20, 34, '#c92a2a'); R(x + 2, y - 32, 12, 24, '#1b1922');
+  const cs = ['#ffd43b', '#4dabf7', '#ff922b', '#69db7c'];
+  for (let i = 0; i < 4; i++) for (let j = 0; j < 3; j++) R(x + 3 + j * 4, y - 30 + i * 6, 3, 3, cs[(i + j) % 4]);
+  R(x + 15, y - 30, 3, 8, '#868e96'); R(x + 3, y - 6, 12, 3, '#343a40');
+}
+function mobiliarCopa(b, livres) {
+  const cx = Math.round(b.ix + b.iw / 2);
+  const bw = Math.min(66, Math.floor(b.iw * 0.36));
+  geladeira(b.ix + 4, b.fy + 10);
+  bancada(b.ix + 22, b.fy - 4, bw);
+  cafeteira(b.ix + 28, b.fy - 4); microondas(b.ix + 22 + bw - 20, b.fy - 4);
+  cardapio(b.ix + 24, b.iy + 3);
+  relogio(b.ix + 58, b.iy + 6);
+  janela(cx - 8, b.iy + 5, 24, 15);
+  const tw = 44, tx = b.ix + b.iw - tw - 10;
+  tapetinho(tx - 8, b.fy + 8, tw + 16, 36);
+  tvGame(tx, b.fy + 4, tw);
+  if (livres.includes('samanta')) { sentadoCostas(tx + 4, b.fy + 14, AG.samanta); etiqueta(tx + 10, b.fy + 3, AG.samanta); R(tx + 4, b.fy + 22, 5, 2, '#2b2430'); }
+  puff(tx + 1, b.fy + 23, '#fd7e14', '#d9480f'); puff(tx + 24, b.fy + 23, '#4dabf7', '#1c7ed6');
+  mesaRedonda(cx - 14, b.fy + Math.round(b.fh * 0.5));
+  if (b.iw > 260) {
+    sofaFrente(b.ix + 16, b.fy + b.fh - 22, 58, '#e8590c', '#b8440a');
+    mesaRedonda(cx + 70, b.fy + Math.round(b.fh * 0.5));
+    maquinaSalgadinho(b.ix + 22 + bw + 6, b.fy + 8);
+  }
+  planta(b.ix + b.iw - 16, b.fy + b.fh - 20);
+  bebedouro(b.ix + 4, b.fy + b.fh - 24);
+}
+
+// ---------- sala de produtos (em breve) ----------
+function caixa(x, y) { R(x, y, 12, 10, '#c08a4f'); R(x, y, 12, 1, '#d9a66a'); R(x + 5, y, 2, 10, '#e8d3a8'); R(x, y + 9, 12, 1, '#8f6233'); }
+function mobiliarProdutos(b) {
+  const cx = Math.round(b.ix + b.iw / 2);
+  const t = 'em breve', w = larguraTexto(t, 7) + 12, sx = b.ix + b.iw - w - 12;
+  R(sx, b.iy + 6, w, 14, '#f8f9fa'); R(sx, b.iy + 6, w, 1, '#adb5bd'); texto(t, sx + 6, b.iy + 9, 7, '#868e96');
+  caixa(b.ix + 10, b.fy + 18); caixa(b.ix + 23, b.fy + 18); caixa(b.ix + 16, b.fy + 9);
+  caixa(b.ix + b.iw - 30, b.fy + b.fh - 22); caixa(b.ix + b.iw - 44, b.fy + b.fh - 14);
+  for (let i = 0; i < b.iw - 24; i += 8) R(b.ix + 12 + i, b.fy + b.fh / 2, 4, 2, i % 16 ? '#2b2430' : '#fab005');
+  R(cx + 10, b.fy + 20, 10, 10, '#e9ecef'); R(cx + 10, b.fy + 20, 10, 2, '#4dabf7');
+}
+
+// ---------- salas, paredes e portas ----------
+function prepararSala(s) {
+  const X = s.x * T, Y = s.y * T, W = s.w * T, H = s.h * T;
+  const ix = X + PAREDE, iy = Y + PAREDE, iw = W - 2 * PAREDE, ih = H - 2 * PAREDE, fy = iy + FACE;
+  s.box = { X, Y, W, H, ix, iy, iw, ih, fy, fh: iy + ih - fy };
+  const e = ESTILO[s.tipo];
+  e.piso(ix, fy, iw, s.box.fh);
+  R(ix, iy, iw, FACE, e.parede); R(ix, iy + FACE - 3, iw, 3, e.rodape); R(ix, iy, iw, 1, 'rgba(255,255,255,.18)');
+  R(ix, fy, iw, 2, 'rgba(0,0,0,.14)');
+}
+function paredes(s) {
+  const { X, Y, W, H } = s.box;
+  const lados = { top: [X, Y, W, PAREDE], bottom: [X, Y + H - PAREDE, W, PAREDE], left: [X, Y, PAREDE, H], right: [X + W - PAREDE, Y, PAREDE, H] };
+  for (const lado in lados) {
+    const [x, y, w, h] = lados[lado];
+    if (s.vidro && s.vidro.includes(lado)) {
+      R(x, y, w, h, '#7fc4dd');
+      if (w > h) for (let i = 2; i < w; i += 7) R(x + i, y + 1, 2, 1, '#e3f6fc'); else for (let i = 2; i < h; i += 7) R(x + 1, y + i, 1, 2, '#e3f6fc');
+    } else {
+      R(x, y, w, h, '#ece7df');
+      if (w > h) R(x, y + h - 1, w, 1, '#b9b1a4'); else R(lado === 'left' ? x + w - 1 : x, y, 1, h, '#b9b1a4');
+    }
+  }
+  for (const p of s.portas || []) {
+    const len = 2 * T;
+    if (p.lado === 'bottom') { R(X + p.em * T, Y + H - PAREDE, len, PAREDE, '#b8a88f'); }
+    if (p.lado === 'left')   { R(X, Y + p.em * T, PAREDE, len, '#b8a88f'); }
+    if (p.lado === 'right')  { R(X + W - PAREDE, Y + p.em * T, PAREDE, len, '#b8a88f'); }
+    if (p.lado === 'top')    { ESTILO[s.tipo].piso(X + p.em * T, Y, len, PAREDE + FACE); R(X + p.em * T - 2, Y + PAREDE, 2, FACE, '#8d7f6c'); R(X + p.em * T + len, Y + PAREDE, 2, FACE, '#8d7f6c'); }
+  }
+}
+function rotulo(s) {
+  const nome = s.nome, w = larguraTexto(nome, 6.5) + 10;
+  const x = s.box.X + s.box.W / 2 - w / 2, y = s.box.Y - 5;
+  R(x, y, w, 11, '#17151c'); R(x + 1, y + 1, w - 2, 9, s.tipo === 'produtos' ? '#868e96' : '#f8f4ec');
+  texto(nome, x + 5, y + 2, 6.5, s.tipo === 'produtos' ? '#f8f9fa' : '#2b2430');
+}
+const MOBILIA = { gerente: mobiliarGerente, estudio: mobiliarEstudio, crescimento: mobiliarCrescimento, copa: mobiliarCopa, produtos: mobiliarProdutos };
+
+function desenhar(canvas, L) {
+  const W = L.w * T, H = L.h * T;
+  canvas.width = W * S; canvas.height = H * S;
+  ctx = canvas.getContext('2d');
+  ctx.imageSmoothingEnabled = false;
+  ctx.setTransform(S, 0, 0, S, 0, 0);
+  R(0, 0, W, H, '#3a3644');
+  pisoConcreto(6, 6, W - 12, H - 12);
+  const ent = L.entrada;
+  if (ent.lado === 'bottom') { pisoConcreto(ent.em * T, H - 6, 2 * T, 6); R(ent.em * T + 2, H - 14, 2 * T - 4, 8, '#7a4a2a'); R(ent.em * T + 4, H - 12, 2 * T - 8, 4, '#8f5a35'); }
+  if (ent.lado === 'left') { pisoConcreto(0, ent.em * T, 6, 2 * T); R(6, ent.em * T + 2, 8, 2 * T - 4, '#7a4a2a'); R(8, ent.em * T + 4, 4, 2 * T - 8, '#8f5a35'); }
+  for (const s of L.salas) prepararSala(s);
+  for (const s of L.salas) MOBILIA[s.tipo](s.box, L.livres || []);
+  for (const s of L.salas) paredes(s);
+  for (const [f, x, y] of L.extras || []) f(x * T, y * T);
+  for (const s of L.salas) rotulo(s);
+  desenharEtiquetas();
+}
+
+// ---------- as 3 versões ----------
+const LIVRES = ['samanta'];
+const VERSOES = [
+  {
+    titulo: 'Versão 1: gerente no centro',
+    texto: 'A sala do gerente fica no meio, alta e com paredes de vidro dos dois lados. As outras quatro salas ficam nos cantos, e quem vai de uma sala para outra passa em volta dela. A entrada do prédio fica embaixo dela.',
+    w: 40, h: 24, entrada: { lado: 'bottom', em: 18 },
+    salas: [
+      { tipo: 'crescimento', nome: 'Sala de crescimento', x: 1, y: 1, w: 11, h: 10, portas: [{ lado: 'bottom', em: 4 }, { lado: 'right', em: 5 }] },
+      { tipo: 'gerente', nome: 'Sala do gerente', x: 14, y: 3, w: 10, h: 18, vidro: ['left', 'right'], portas: [{ lado: 'bottom', em: 4 }] },
+      { tipo: 'estudio', nome: 'Estúdio', x: 26, y: 1, w: 13, h: 10, portas: [{ lado: 'bottom', em: 5 }, { lado: 'left', em: 5 }] },
+      { tipo: 'copa', nome: 'Copa', x: 1, y: 13, w: 11, h: 10, portas: [{ lado: 'right', em: 4 }, { lado: 'top', em: 4 }] },
+      { tipo: 'produtos', nome: 'Sala de produtos', x: 26, y: 13, w: 13, h: 10, portas: [{ lado: 'left', em: 4 }] },
+    ],
+    extras: [[plantaGrande, 12.4, 1.2], [plantaGrande, 24.4, 1.2], [bebedouro, 12.6, 21.4]],
+  },
+  {
+    titulo: 'Versão 2: corredor principal',
+    texto: 'As três salas de trabalho ficam lado a lado em cima, com a do gerente no meio, maior e com a frente de vidro. Um corredor atravessa o prédio. Embaixo ficam a copa, grande, e a sala de produtos. A entrada é pela esquerda do corredor.',
+    w: 41, h: 24, entrada: { lado: 'left', em: 12 },
+    salas: [
+      { tipo: 'crescimento', nome: 'Sala de crescimento', x: 1, y: 1, w: 11, h: 10, portas: [{ lado: 'bottom', em: 4 }] },
+      { tipo: 'gerente', nome: 'Sala do gerente', x: 13, y: 1, w: 13, h: 11, vidro: ['bottom'], portas: [{ lado: 'bottom', em: 5 }] },
+      { tipo: 'estudio', nome: 'Estúdio', x: 27, y: 1, w: 13, h: 10, portas: [{ lado: 'bottom', em: 5 }] },
+      { tipo: 'copa', nome: 'Copa', x: 1, y: 14, w: 19, h: 9, portas: [{ lado: 'top', em: 12 }] },
+      { tipo: 'produtos', nome: 'Sala de produtos', x: 21, y: 14, w: 19, h: 9, portas: [{ lado: 'top', em: 4 }] },
+    ],
+    extras: [[plantaGrande, 38.6, 11.4], [bebedouro, 12.1, 1.5], [planta, 26.1, 1.5]],
+  },
+  {
+    titulo: 'Versão 3: estúdio grande',
+    texto: 'O estúdio ocupa a lateral direita inteira, com espaço para cabine de gravação e sofá de revisão. No centro, a sala do gerente fica em cima e a copa embaixo, como ponto de encontro. A sala de crescimento fica à esquerda, em cima da sala de produtos.',
+    w: 41, h: 24, entrada: { lado: 'bottom', em: 12 },
+    salas: [
+      { tipo: 'crescimento', nome: 'Sala de crescimento', x: 1, y: 1, w: 11, h: 10, portas: [{ lado: 'right', em: 5 }] },
+      { tipo: 'produtos', nome: 'Sala de produtos', x: 1, y: 13, w: 11, h: 10, portas: [{ lado: 'right', em: 4 }] },
+      { tipo: 'gerente', nome: 'Sala do gerente', x: 14, y: 1, w: 11, h: 10, vidro: ['bottom'], portas: [{ lado: 'bottom', em: 4 }] },
+      { tipo: 'copa', nome: 'Copa', x: 14, y: 13, w: 11, h: 10, portas: [{ lado: 'top', em: 4 }] },
+      { tipo: 'estudio', nome: 'Estúdio', x: 27, y: 1, w: 13, h: 22, portas: [{ lado: 'left', em: 10 }] },
+    ],
+    extras: [[plantaGrande, 12.3, 1.2], [plantaGrande, 25.3, 1.2], [bebedouro, 25.6, 21.4]],
+  },
+];
+
+const alvo = document.getElementById('versoes');
+for (const v of VERSOES) {
+  const sec = document.createElement('section');
+  sec.innerHTML = `<h2>${v.titulo}</h2><p>${v.texto}</p>`;
+  const c = document.createElement('canvas');
+  sec.appendChild(c);
+  alvo.appendChild(sec);
+  v.livres = LIVRES;
+  desenhar(c, v);
+}
+</script>
+</body>
+</html>

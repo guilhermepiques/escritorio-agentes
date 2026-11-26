@@ -1,0 +1,7 @@
+[
+  { "id": "crescimento", "nome": "Sala de crescimento", "tipo": "equipe",  "fileira": "cima",  "largura": 11 },
+  { "id": "gerente",     "nome": "Sala do gerente",     "tipo": "gerente", "fileira": "cima",  "largura": 13 },
+  { "id": "estudio",     "nome": "Estúdio",             "tipo": "estudio", "fileira": "cima",  "largura": 13 },
+  { "id": "copa",        "nome": "Copa",                "tipo": "copa",    "fileira": "baixo", "largura": 19 },
+  { "id": "produtos",    "nome": "Sala de produtos",    "tipo": "equipe",  "fileira": "baixo", "largura": 19 }
+]

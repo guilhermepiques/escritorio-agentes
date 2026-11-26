@@ -1,0 +1,8 @@
+[
+  { "id": "gerente", "nome": "Gerson", "cargo": "Gerente", "cor": "#868E96", "sala": "gerente" },
+  { "id": "cacadora-virais", "nome": "Carla", "cargo": "Caçadora de virais", "cor": "#E8590C", "sala": "crescimento" },
+  { "id": "roteirista-virais", "nome": "Roberto", "cargo": "Roteirista", "cor": "#4263EB", "sala": "crescimento" },
+  { "id": "social-virais", "nome": "Samanta", "cargo": "Social media", "cor": "#D6336C", "sala": "crescimento" },
+  { "id": "revisora-virais", "nome": "Renata", "cargo": "Revisora", "cor": "#2F9E44", "sala": "crescimento" },
+  { "id": "editor-virais", "nome": "Edu", "cargo": "Editor de vídeo", "cor": "#F59F00", "sala": "estudio" }
+]

@@ -1,0 +1,36 @@
+{
+  "name": "estudio",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Estúdio de vídeo do Escritório: transforma um video.json em um mp4 vertical com narração, legenda e efeitos.",
+  "type": "module",
+  "scripts": {
+    "render": "node scripts/render.mjs",
+    "quadros": "node scripts/render.mjs --quadros",
+    "sons": "node scripts/gerar-sons.mjs",
+    "vozes": "node scripts/vozes.mjs",
+    "studio": "remotion studio src/index.ts"
+  },
+  "dependencies": {
+    "@lobehub/fluent-emoji-3d": "1.1.0",
+    "@react-three/fiber": "9.8.2",
+    "@remotion/bundler": "4.0.547",
+    "@remotion/cli": "4.0.547",
+    "@remotion/google-fonts": "4.0.547",
+    "@remotion/noise": "4.0.547",
+    "@remotion/renderer": "4.0.547",
+    "@remotion/shapes": "4.0.547",
+    "@remotion/three": "4.0.547",
+    "@remotion/transitions": "4.0.547",
+    "lucide-react": "^0.460.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "remotion": "4.0.547",
+    "three": "0.187.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "@types/three": "0.187.0",
+    "typescript": "^5.6.0"
+  }
+}

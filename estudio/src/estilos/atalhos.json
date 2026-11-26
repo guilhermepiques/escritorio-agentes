@@ -1,0 +1,50 @@
+{
+  "pop": {
+    "cores": { "fundo": "#FFD23F", "fundo2": "#FFB627", "texto": "#1B1B1B", "destaque": "#FF4F3D", "destaque2": "#3DB7FF", "contorno": "#1B1B1B", "cartao": "#FFFFFF", "cartaoTexto": "#1B1B1B" },
+    "fonte": "Baloo 2", "fonteApoio": "Baloo 2",
+    "fundo": { "tipo": "bolinhas", "movimento": true },
+    "animacao": "pop", "contorno": 0, "sombra": "dura", "cantos": 28, "maiusculas": false
+  },
+  "neon": {
+    "cores": { "fundo": "#0E0B1F", "fundo2": "#1D1640", "texto": "#FFFFFF", "destaque": "#C8FF3D", "destaque2": "#FF3DA8", "contorno": "#000000", "cartao": "#1D1640", "cartaoTexto": "#FFFFFF" },
+    "fonte": "Anton", "fonteApoio": "Archivo Black",
+    "fundo": { "tipo": "grade", "movimento": true },
+    "animacao": "zoom", "contorno": 0, "sombra": "nenhuma", "cantos": 18, "maiusculas": true
+  },
+  "editorial": {
+    "cores": { "fundo": "#F4F1EA", "fundo2": "#E9E4D8", "texto": "#111111", "destaque": "#E8442E", "destaque2": "#111111", "contorno": "#111111", "cartao": "#FFFFFF", "cartaoTexto": "#111111" },
+    "fonte": "DM Serif Display", "fonteApoio": "Space Grotesk",
+    "fundo": { "tipo": "chapado", "movimento": false },
+    "animacao": "subir", "contorno": 0, "sombra": "nenhuma", "cantos": 4, "maiusculas": false
+  },
+  "cartoon": {
+    "cores": { "fundo": "#1E6BFF", "fundo2": "#1557D6", "texto": "#FFFFFF", "destaque": "#FFE14D", "destaque2": "#FF5A7A", "contorno": "#0A1A4A", "cartao": "#FFFFFF", "cartaoTexto": "#0A1A4A" },
+    "fonte": "Luckiest Guy", "fonteApoio": "Fredoka",
+    "fundo": { "tipo": "raios", "movimento": true },
+    "animacao": "pop", "contorno": 10, "sombra": "dura", "cantos": 24, "maiusculas": true
+  },
+  "giz": {
+    "cores": { "fundo": "#1F3B2D", "fundo2": "#264A38", "texto": "#F5F5EE", "destaque": "#FFD86B", "destaque2": "#FF9AA2", "contorno": "#10241A", "cartao": "#2C5541", "cartaoTexto": "#F5F5EE" },
+    "fonte": "Permanent Marker", "fonteApoio": "Caveat",
+    "fundo": { "tipo": "chapado", "movimento": false },
+    "animacao": "maquina", "contorno": 0, "sombra": "nenhuma", "cantos": 10, "maiusculas": false
+  },
+  "pixel": {
+    "cores": { "fundo": "#111133", "fundo2": "#22225A", "texto": "#FFFFFF", "destaque": "#00F0FF", "destaque2": "#FFCC00", "contorno": "#000000", "cartao": "#22225A", "cartaoTexto": "#FFFFFF" },
+    "fonte": "Press Start 2P", "fonteApoio": "Press Start 2P",
+    "fundo": { "tipo": "grade", "movimento": true },
+    "animacao": "deslizar", "contorno": 0, "sombra": "dura", "cantos": 0, "maiusculas": true
+  },
+  "doce": {
+    "cores": { "fundo": "#FFE3EC", "fundo2": "#E3F0FF", "texto": "#3A2E5C", "destaque": "#FF6FA5", "destaque2": "#6FB7FF", "contorno": "#3A2E5C", "cartao": "#FFFFFF", "cartaoTexto": "#3A2E5C" },
+    "fonte": "Fredoka", "fonteApoio": "Fredoka",
+    "fundo": { "tipo": "formas", "movimento": true },
+    "animacao": "pop", "contorno": 0, "sombra": "suave", "cantos": 40, "maiusculas": false
+  },
+  "impacto": {
+    "cores": { "fundo": "#000000", "fundo2": "#1A1A1A", "texto": "#FFFFFF", "destaque": "#FF2E2E", "destaque2": "#FFFFFF", "contorno": "#000000", "cartao": "#1A1A1A", "cartaoTexto": "#FFFFFF" },
+    "fonte": "Bebas Neue", "fonteApoio": "Oswald",
+    "fundo": { "tipo": "chapado", "movimento": false },
+    "animacao": "zoom", "contorno": 0, "sombra": "nenhuma", "cantos": 0, "maiusculas": true
+  }
+}

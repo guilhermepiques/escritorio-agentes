@@ -1,0 +1,138 @@
+{
+  "titulo": "Ache o diferente em 5 segundos",
+  "voz": {
+    "nome": "francisca",
+    "velocidade": 10
+  },
+  "estilo": {
+    "atalho": "cartoon",
+    "emoji": "3d"
+  },
+  "legenda": {
+    "modo": "karaoke",
+    "palavrasPorVez": 2,
+    "posicao": "cima",
+    "tamanho": 70,
+    "caixa": true
+  },
+  "cenas": [
+    {
+      "narracao": "Ache o diferente em cinco segundos. Valendo!",
+      "pecas": [
+        {
+          "tipo": "grade-emojis",
+          "emoji": "🐶",
+          "diferente": "🐕",
+          "linhas": 7,
+          "colunas": 6,
+          "posicao": 26
+        },
+        {
+          "tipo": "cronometro",
+          "segundos": 5,
+          "comecaEm": "fim-da-narracao",
+          "forma": "barra",
+          "som": "tic-tac"
+        }
+      ]
+    },
+    {
+      "narracao": "Achou? Estava aqui!",
+      "entrada": "continua",
+      "pecas": [
+        {
+          "tipo": "grade-emojis",
+          "emoji": "🐶",
+          "diferente": "🐕",
+          "linhas": 7,
+          "colunas": 6,
+          "posicao": 26,
+          "revelarEm": "palavra:aqui"
+        }
+      ],
+      "efeitos": [
+        {
+          "som": "tambor",
+          "em": 0
+        },
+        {
+          "som": "vidro",
+          "em": "palavra:aqui"
+        }
+      ]
+    },
+    {
+      "narracao": "Agora mais difícil.",
+      "entrada": "relogio",
+      "estilo": {
+        "atalho": "cartoon",
+        "cores": {
+          "fundo": "#FF5A7A",
+          "fundo2": "#E84466"
+        },
+        "emoji": "3d"
+      },
+      "pecas": [
+        {
+          "tipo": "grade-emojis",
+          "emoji": "🍕",
+          "diferente": "🥧",
+          "linhas": 8,
+          "colunas": 7,
+          "posicao": 41
+        },
+        {
+          "tipo": "cronometro",
+          "segundos": 5,
+          "comecaEm": "fim-da-narracao",
+          "forma": "barra",
+          "som": "tic-tac"
+        }
+      ],
+      "efeitos": [
+        {
+          "som": "whoosh",
+          "em": 0
+        }
+      ]
+    },
+    {
+      "narracao": "Era essa torta aqui. Se achou as duas, comenta eu achei.",
+      "entrada": "continua",
+      "estilo": {
+        "atalho": "cartoon",
+        "cores": {
+          "fundo": "#FF5A7A",
+          "fundo2": "#E84466"
+        },
+        "emoji": "3d"
+      },
+      "pecas": [
+        {
+          "tipo": "grade-emojis",
+          "emoji": "🍕",
+          "diferente": "🥧",
+          "linhas": 8,
+          "colunas": 7,
+          "posicao": 41,
+          "revelarEm": "palavra:torta"
+        },
+        {
+          "tipo": "emojis",
+          "emojis": [
+            "🏆",
+            "👀"
+          ],
+          "tamanho": 150,
+          "entraEm": "palavra:comenta"
+        }
+      ],
+      "efeitos": [
+        {
+          "som": "vidro",
+          "em": "palavra:torta"
+        }
+      ]
+    }
+  ]
+}

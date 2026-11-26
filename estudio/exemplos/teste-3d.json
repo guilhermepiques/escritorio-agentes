@@ -1,0 +1,252 @@
+{
+  "titulo": "Teste do palco 3D (sem narração)",
+  "estilo": {
+    "atalho": "pop"
+  },
+  "legenda": {
+    "modo": "desligada"
+  },
+  "cenas": [
+    {
+      "duracao": 4,
+      "palco3d": {
+        "luz": "dia",
+        "chao": "#c49a6c",
+        "camera": [
+          {
+            "em": 0,
+            "posicao": [
+              8,
+              6,
+              13
+            ],
+            "olhaPara": [
+              0,
+              1.2,
+              -2
+            ]
+          },
+          {
+            "em": 4,
+            "posicao": [
+              3.5,
+              2.6,
+              7
+            ],
+            "olhaPara": [
+              0,
+              1.2,
+              -1
+            ]
+          }
+        ],
+        "objetos": [
+          {
+            "modelo": "rua",
+            "comprimento": 60,
+            "cores": {
+              "asfalto": "#8a6a4a"
+            },
+            "faixas": false
+          },
+          {
+            "modelo": "casa",
+            "posicao": [
+              -6,
+              0.2,
+              -3
+            ],
+            "rotacao": [
+              0,
+              90,
+              0
+            ],
+            "cor": "#f2b8c6"
+          },
+          {
+            "modelo": "casa",
+            "posicao": [
+              -6,
+              0.2,
+              1
+            ],
+            "rotacao": [
+              0,
+              90,
+              0
+            ],
+            "cor": "#f6e39b"
+          },
+          {
+            "modelo": "predio",
+            "posicao": [
+              6.5,
+              0.2,
+              -4
+            ],
+            "rotacao": [
+              0,
+              -90,
+              0
+            ],
+            "andares": 6,
+            "cor": "#cfe3f0"
+          },
+          {
+            "modelo": "arvore",
+            "posicao": [
+              5,
+              0.2,
+              2
+            ]
+          },
+          {
+            "modelo": "poste",
+            "posicao": [
+              -4.3,
+              0.2,
+              4
+            ],
+            "rotacao": [
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "modelo": "boneco",
+            "posicao": [
+              -4.2,
+              0.2,
+              2
+            ],
+            "rotacao": [
+              0,
+              60,
+              0
+            ],
+            "acao": "acenar"
+          },
+          {
+            "modelo": "caminhao",
+            "posicao": [
+              1.4,
+              0,
+              -14
+            ],
+            "carga": true,
+            "acao": "rodar",
+            "movimentos": [
+              {
+                "de": 0.3,
+                "ate": 3,
+                "posicao": [
+                  1.4,
+                  0,
+                  -1
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "pecas": [
+        {
+          "tipo": "etiqueta",
+          "texto": "ASFALTO?"
+        }
+      ]
+    },
+    {
+      "duracao": 4,
+      "entrada": "corte",
+      "palco3d": {
+        "luz": "estudio",
+        "ceu": "#f3efe6",
+        "chao": "#e9e4da",
+        "camera": [
+          {
+            "em": 0,
+            "posicao": [
+              0,
+              8,
+              6.5
+            ],
+            "olhaPara": [
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "em": 4,
+            "posicao": [
+              0,
+              5,
+              4
+            ],
+            "olhaPara": [
+              0,
+              0.3,
+              0
+            ]
+          }
+        ],
+        "objetos": [
+          {
+            "modelo": "pedra",
+            "repetir": {
+              "quantidade": [
+                5,
+                1,
+                5
+              ],
+              "espaco": [
+                1.05,
+                1,
+                1.05
+              ],
+              "variar": 0.6,
+              "atraso": 0.04
+            },
+            "entraEm": 0.2,
+            "entrada": "cair",
+            "cor": "#b5b5b5"
+          },
+          {
+            "modelo": "pedra",
+            "escala": 0.45,
+            "posicao": [
+              0.5,
+              0.55,
+              0.5
+            ],
+            "repetir": {
+              "quantidade": [
+                4,
+                1,
+                4
+              ],
+              "espaco": [
+                1.05,
+                1,
+                1.05
+              ],
+              "variar": 0.4,
+              "atraso": 0.03
+            },
+            "entraEm": 1.8,
+            "entrada": "cair",
+            "cor": "#e2d3b5"
+          }
+        ]
+      },
+      "pecas": [
+        {
+          "tipo": "etiqueta",
+          "texto": "PEDRA 95%"
+        }
+      ]
+    }
+  ]
+}

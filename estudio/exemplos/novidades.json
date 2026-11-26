@@ -1,0 +1,46 @@
+{
+  "titulo": "Teste das novidades: emoji 3D, transições, selo, manchas e sons do Kenney",
+  "voz": { "nome": "francisca", "velocidade": 8 },
+  "estilo": { "atalho": "doce", "emoji": "3d", "fundo": { "tipo": "manchas" } },
+  "legenda": { "modo": "karaoke", "palavrasPorVez": 3, "posicao": "baixo", "tamanho": 72 },
+  "cenas": [
+    {
+      "narracao": "Você sabia que o coração do camarão fica na cabeça?",
+      "pecas": [
+        { "tipo": "selo", "texto": "Você sabia?", "pontas": 16, "tamanho": 380 },
+        { "tipo": "emoji", "emoji": "🦐", "tamanho": 300, "movimento": "flutuar" }
+      ],
+      "efeitos": [{ "som": "pergunta", "em": 0 }]
+    },
+    {
+      "narracao": "E tem mais: o polvo tem três corações.",
+      "entrada": "cortina",
+      "estilo": { "atalho": "pop", "emoji": "3d" },
+      "pecas": [
+        { "tipo": "texto", "texto": "Um texto propositalmente comprido para testar se a fonte encolhe sozinha quando não cabe", "tamanho": "gg" },
+        { "tipo": "emojis", "emojis": ["🐙", "❤️", "❤️", "❤️"], "tempos": ["palavra:polvo", "palavra:três", "palavra:três+0.15", "palavra:três+0.3"] }
+      ],
+      "efeitos": [{ "som": "confirma", "em": "palavra:corações" }]
+    },
+    {
+      "narracao": "Ache o diferente!",
+      "entrada": "cubo",
+      "estilo": { "atalho": "cartoon", "emoji": "3d" },
+      "duracao": 3,
+      "pecas": [
+        { "tipo": "grade-emojis", "emoji": "🍩", "diferente": "🥯", "linhas": 6, "colunas": 5, "posicao": 17, "revelarEm": 2.2 }
+      ],
+      "efeitos": [{ "som": "vidro", "em": 2.2 }]
+    },
+    {
+      "narracao": "Comenta qual emoji você prefere.",
+      "entrada": "iris",
+      "estilo": { "atalho": "neon", "emoji": "3d", "fundo": { "tipo": "emojis", "emoji": "✨" } },
+      "pecas": [
+        { "tipo": "comparacao", "a": { "emoji": "😎", "texto": "Óculos" }, "b": { "emoji": "🤩", "texto": "Estrelas" } },
+        { "tipo": "chamada", "texto": "Qual você prefere?", "emoji": "👇", "entraEm": "palavra:comenta" }
+      ],
+      "efeitos": [{ "som": "abre", "em": 0 }]
+    }
+  ]
+}

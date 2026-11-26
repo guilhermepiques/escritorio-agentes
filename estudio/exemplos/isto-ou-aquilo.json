@@ -1,0 +1,140 @@
+{
+  "titulo": "Isto ou aquilo: praia ou montanha",
+  "voz": {
+    "nome": "francisca",
+    "velocidade": 8
+  },
+  "estilo": {
+    "atalho": "doce",
+    "emoji": "3d",
+    "fundo": {
+      "tipo": "manchas"
+    }
+  },
+  "legenda": {
+    "modo": "frase",
+    "posicao": "baixo",
+    "tamanho": 64
+  },
+  "cenas": [
+    {
+      "narracao": "Só pode escolher um. Praia ou montanha?",
+      "pecas": [
+        {
+          "tipo": "texto",
+          "texto": "Só pode escolher UM",
+          "destaque": [
+            "UM"
+          ],
+          "tamanho": "m"
+        },
+        {
+          "tipo": "comparacao",
+          "a": {
+            "emoji": "🏖️",
+            "texto": "Praia"
+          },
+          "b": {
+            "emoji": "🏔️",
+            "texto": "Montanha"
+          }
+        }
+      ],
+      "duracao": 4
+    },
+    {
+      "narracao": "Pizza ou hambúrguer? Comenta o seu.",
+      "entrada": "virar",
+      "estilo": {
+        "atalho": "editorial",
+        "emoji": "3d"
+      },
+      "pecas": [
+        {
+          "tipo": "comparacao",
+          "a": {
+            "emoji": "🍕",
+            "texto": "Pizza"
+          },
+          "b": {
+            "emoji": "🍔",
+            "texto": "Hambúrguer"
+          },
+          "meio": "vs",
+          "porcentagens": [
+            58,
+            42
+          ],
+          "revelarEm": "fim-da-narracao"
+        }
+      ]
+    },
+    {
+      "narracao": "Inverno ou verão?",
+      "entrada": "cortina-diagonal",
+      "estilo": {
+        "atalho": "giz",
+        "emoji": "3d"
+      },
+      "pecas": [
+        {
+          "tipo": "texto",
+          "texto": "Inverno ou verão?",
+          "tamanho": "g"
+        },
+        {
+          "tipo": "emojis",
+          "emojis": [
+            "❄️",
+            "☀️"
+          ],
+          "separador": "ou"
+        }
+      ],
+      "duracao": 3
+    },
+    {
+      "narracao": "Gato ou cachorro?",
+      "entrada": "cubo",
+      "estilo": {
+        "atalho": "pixel",
+        "emoji": "3d"
+      },
+      "pecas": [
+        {
+          "tipo": "texto",
+          "texto": "Gato ou cachorro?",
+          "tamanho": "m"
+        },
+        {
+          "tipo": "emojis",
+          "emojis": [
+            "🐱",
+            "🐶"
+          ],
+          "separador": "VS"
+        }
+      ],
+      "duracao": 3
+    },
+    {
+      "narracao": "Café ou chá?",
+      "entrada": "soco",
+      "estilo": {
+        "atalho": "impacto",
+        "emoji": "3d"
+      },
+      "pecas": [
+        {
+          "tipo": "texto",
+          "texto": "Café ou chá?",
+          "tamanho": "gg",
+          "destaque": [
+            "chá?"
+          ]
+        }
+      ],
+      "duracao": 3
+    }
+  ]
+}

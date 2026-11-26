@@ -1,0 +1,162 @@
+{
+  "titulo": "3 fatos sobre o polvo",
+  "voz": {
+    "nome": "francisca",
+    "velocidade": 8
+  },
+  "estilo": {
+    "atalho": "neon",
+    "emoji": "3d"
+  },
+  "legenda": {
+    "modo": "palavra",
+    "posicao": "baixo",
+    "tamanho": 96,
+    "maiusculas": true
+  },
+  "cenas": [
+    {
+      "narracao": "O polvo é o bicho mais estranho do mar. E eu provo em três fatos.",
+      "entrada": "zoom",
+      "pecas": [
+        {
+          "tipo": "emoji",
+          "emoji": "🐙",
+          "tamanho": 380,
+          "movimento": "flutuar"
+        },
+        {
+          "tipo": "texto",
+          "texto": "O bicho mais estranho do mar",
+          "destaque": [
+            "estranho"
+          ],
+          "tamanho": "g"
+        }
+      ],
+      "efeitos": [
+        {
+          "som": "suspense",
+          "em": 0,
+          "volume": 0.7
+        }
+      ]
+    },
+    {
+      "narracao": "Fato um: ele tem três corações.",
+      "entrada": "cubo",
+      "pecas": [
+        {
+          "tipo": "etiqueta",
+          "texto": "Fato 1"
+        },
+        {
+          "tipo": "numero",
+          "ate": 3,
+          "legenda": "corações",
+          "comecaEm": "palavra:três"
+        },
+        {
+          "tipo": "icone",
+          "nome": "heart",
+          "tamanho": 180,
+          "movimento": "pulsar",
+          "cor": "#FF3DA8"
+        }
+      ],
+      "efeitos": [
+        {
+          "som": "whoosh",
+          "em": 0
+        },
+        {
+          "som": "brilho",
+          "em": "palavra:três"
+        }
+      ]
+    },
+    {
+      "narracao": "Fato dois: o sangue dele é azul, por causa do cobre.",
+      "entrada": "cortina",
+      "estilo": {
+        "atalho": "neon",
+        "emoji": "3d",
+        "cores": {
+          "destaque": "#3DD6FF"
+        }
+      },
+      "pecas": [
+        {
+          "tipo": "etiqueta",
+          "texto": "Fato 2"
+        },
+        {
+          "tipo": "texto",
+          "texto": "Sangue azul",
+          "destaque": [
+            "azul"
+          ],
+          "tamanho": "gg"
+        },
+        {
+          "tipo": "texto",
+          "texto": "por causa do cobre",
+          "tamanho": "m",
+          "apoio": true,
+          "entraEm": "palavra:cobre"
+        }
+      ],
+      "efeitos": [
+        {
+          "som": "whoosh",
+          "em": 0
+        }
+      ]
+    },
+    {
+      "narracao": "Fato três: dois terços dos neurônios ficam nos braços. Cada braço meio que pensa sozinho.",
+      "entrada": "empurrar",
+      "pecas": [
+        {
+          "tipo": "etiqueta",
+          "texto": "Fato 3"
+        },
+        {
+          "tipo": "lista",
+          "itens": [
+            {
+              "emoji": "🧠",
+              "texto": "1/3 na cabeça"
+            },
+            {
+              "emoji": "💪",
+              "texto": "2/3 nos braços"
+            }
+          ],
+          "tempos": [
+            "palavra:dois",
+            "palavra:braços"
+          ],
+          "numerada": false
+        }
+      ],
+      "efeitos": [
+        {
+          "som": "whoosh",
+          "em": 0
+        }
+      ]
+    },
+    {
+      "narracao": "Qual desses você não sabia? Comenta aí.",
+      "entrada": "iris",
+      "pecas": [
+        {
+          "tipo": "chamada",
+          "texto": "Qual você não sabia?",
+          "emoji": "👇"
+        }
+      ]
+    }
+  ]
+}

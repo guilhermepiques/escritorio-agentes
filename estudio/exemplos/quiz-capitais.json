@@ -1,0 +1,79 @@
+{
+  "titulo": "Quiz: capitais que todo mundo erra",
+  "voz": { "nome": "francisca", "velocidade": 8 },
+  "estilo": { "atalho": "pop", "cores": { "fundo": "#7CF2C2", "fundo2": "#5FE0AE" } },
+  "legenda": { "modo": "karaoke", "palavrasPorVez": 3, "posicao": "baixo", "tamanho": 74 },
+  "volumes": { "narracao": 1, "efeitos": 0.5 },
+  "cenas": [
+    {
+      "narracao": "Só um por cento acerta as três. Bora?",
+      "entrada": "corte",
+      "pecas": [
+        { "tipo": "emoji", "emoji": "🌍", "tamanho": 300, "movimento": "girar" },
+        { "tipo": "texto", "texto": "Só 1% acerta as 3", "destaque": ["1%"], "tamanho": "g" }
+      ],
+      "efeitos": [{ "som": "whoosh", "em": 0 }]
+    },
+    {
+      "narracao": "Qual é a capital da Austrália?",
+      "entrada": "deslizar",
+      "pecas": [
+        { "tipo": "etiqueta", "texto": "Pergunta 1 de 3" },
+        { "tipo": "pergunta", "pergunta": "Capital da Austrália?", "alternativas": ["Sydney", "Camberra", "Melbourne"], "correta": 1 },
+        { "tipo": "cronometro", "segundos": 3, "comecaEm": "fim-da-narracao", "forma": "circulo", "tamanho": 200 }
+      ],
+      "efeitos": [{ "som": "whoosh", "em": 0 }]
+    },
+    {
+      "narracao": "Camberra! Sydney é a maior cidade, mas não é a capital.",
+      "entrada": "continua",
+      "pecas": [
+        { "tipo": "etiqueta", "texto": "Pergunta 1 de 3" },
+        { "tipo": "pergunta", "pergunta": "Capital da Austrália?", "alternativas": ["Sydney", "Camberra", "Melbourne"], "correta": 1, "revelarEm": 0 }
+      ],
+      "efeitos": [{ "som": "acerto", "em": 0 }]
+    },
+    {
+      "narracao": "E a capital do Canadá?",
+      "entrada": "deslizar",
+      "estilo": { "atalho": "pop", "cores": { "fundo": "#FFB4C8", "fundo2": "#FF9DB6" } },
+      "pecas": [
+        { "tipo": "etiqueta", "texto": "Pergunta 2 de 3" },
+        { "tipo": "pergunta", "pergunta": "Capital do Canadá?", "alternativas": ["Toronto", "Vancouver", "Ottawa"], "correta": 2 },
+        { "tipo": "cronometro", "segundos": 3, "comecaEm": "fim-da-narracao", "forma": "barra" }
+      ],
+      "efeitos": [{ "som": "whoosh", "em": 0 }]
+    },
+    {
+      "narracao": "Ottawa! Pegadinha clássica.",
+      "entrada": "continua",
+      "estilo": { "atalho": "pop", "cores": { "fundo": "#FFB4C8", "fundo2": "#FF9DB6" } },
+      "pecas": [
+        { "tipo": "etiqueta", "texto": "Pergunta 2 de 3" },
+        { "tipo": "pergunta", "pergunta": "Capital do Canadá?", "alternativas": ["Toronto", "Vancouver", "Ottawa"], "correta": 2, "revelarEm": 0 }
+      ],
+      "efeitos": [{ "som": "acerto", "em": 0 }]
+    },
+    {
+      "narracao": "Última. Qual é a capital da Turquia?",
+      "entrada": "deslizar",
+      "estilo": { "atalho": "pop", "cores": { "fundo": "#B8C6FF", "fundo2": "#A3B4FF" } },
+      "pecas": [
+        { "tipo": "etiqueta", "texto": "Pergunta 3 de 3" },
+        { "tipo": "pergunta", "pergunta": "Capital da Turquia?", "alternativas": ["Istambul", "Ancara", "Esmirna"], "correta": 1 },
+        { "tipo": "cronometro", "segundos": 3, "comecaEm": "fim-da-narracao", "forma": "numero", "tamanho": 200 }
+      ],
+      "efeitos": [{ "som": "whoosh", "em": 0 }]
+    },
+    {
+      "narracao": "Ancara! Comenta aí quantas você acertou.",
+      "entrada": "continua",
+      "estilo": { "atalho": "pop", "cores": { "fundo": "#B8C6FF", "fundo2": "#A3B4FF" } },
+      "pecas": [
+        { "tipo": "pergunta", "pergunta": "Capital da Turquia?", "alternativas": ["Istambul", "Ancara", "Esmirna"], "correta": 1, "revelarEm": 0, "saiEm": "palavra:comenta" },
+        { "tipo": "chamada", "texto": "Quantas você acertou?", "emoji": "👇", "entraEm": "palavra:comenta" }
+      ],
+      "efeitos": [{ "som": "acerto", "em": 0 }, { "som": "pop", "em": "palavra:comenta" }]
+    }
+  ]
+}
